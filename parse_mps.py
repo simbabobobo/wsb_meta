@@ -48,15 +48,16 @@ def parse_mps(mps_file,  eq_penalty_coeff = 3,  ueq_penalty_coeff = 20):
                 eq_list1.append('(' + str(A[i][j]) + '*' + str(var[j]) + ')')
             eq_list1 = "+".join(eq_list1)
             eq_list1 = eq_list1 + '-(' + str(rhs1[i]) + ')'
-            eq_list.append(lambda x: eval(eq_list1))
+            eq_list.append(eq_list1)
 
         if types[i] == 'G':
             ueq_list1 = []
             for j in range(len(var)):
                 ueq_list1.append('(' + str(A[i][j]) + '*' + str(var[j]) + ')')
             ueq_list1 = "+".join(ueq_list1)
-            ueq_list1 = str(rhs1[i]) + '-(' + ueq_list1 + ')'
-            ueq_list.append(lambda x: eval(ueq_list1))
+            ueq_list1 = str(rhs1[i])  + '-(' + ueq_list1 + ')'
+            ueq_list.append(ueq_list1)
+            #lambda x: eval
 
         if types[i] == 'L':
             ueq_list2 = []
@@ -64,7 +65,7 @@ def parse_mps(mps_file,  eq_penalty_coeff = 3,  ueq_penalty_coeff = 20):
                 ueq_list2.append('(' + str(A[i][k]) + '*' + str(var[k]) + ')')
             ueq_list2 = "+".join(ueq_list2)
             ueq_list2 = ueq_list2 + '-(' + str(rhs1[i]) + ')'
-            ueq_list.append(lambda x: eval(ueq_list2))
+            ueq_list.append(ueq_list2)
     # 生成等式和不等式约束
 
     print('Constraint Declarations')
@@ -72,10 +73,14 @@ def parse_mps(mps_file,  eq_penalty_coeff = 3,  ueq_penalty_coeff = 20):
     def penalty_obj(var):
         obj_func = ori_obj(var)
 
-        for eq_method in eq_list:
+        for i in range(len(eq_list)):
+            equation = eq_list[i]
+            eq_method = lambda x: eval(equation)
             obj_func += eq_penalty_coeff * (max(0, abs(eq_method(var)))) ** 2
 
-        for ueq_method in ueq_list:
+        for i in range(len(ueq_list)):
+            equation = ueq_list[i]
+            ueq_method = lambda x: eval(equation)
             obj_func += ueq_penalty_coeff * (max(0, ueq_method(var))) ** 3
 
         return obj_func
@@ -88,24 +93,38 @@ def parse_mps(mps_file,  eq_penalty_coeff = 3,  ueq_penalty_coeff = 20):
 
     def penalty_eq_obj(v):
         p_eq_value = 0
+        eq_value = []
         counter = 0
+        p_eq = []
 
-        for constraint in eq_list:
+        for i in eq_list:
+            constraint = lambda x: eval(i)
             p_eq_value += eq_penalty_coeff * (max(0, abs(constraint(v)))) ** 2
+            eq_value.append(constraint(v))
             if constraint(v) != 0:
                 counter += 1
-        print('number eq is:', counter)
+
+        print('p_eq_value is', p_eq_value,)
+        print('eq_value is', eq_value, )
+        print('number break eq is', counter )
+
         return p_eq_value
 
     def penalty_ueq_obj(v):
         p_ueq_value = 0
+        ueq_value = []
         counter=0
 
-        for constraint in ueq_list:
+        for i in ueq_list:
+            constraint = lambda x: eval(i)
             p_ueq_value += ueq_penalty_coeff * (max(0, constraint(v))) ** 3
+            ueq_value.append(constraint(v))
             if constraint(v) != 0:
                 counter += 1
-        print('number ueq is', counter)
+
+        print('p_ueq_value is', p_ueq_value, )
+        print('ueq_value is', ueq_value, )
+        print('number break ueq is', counter)
 
         return p_ueq_value
 
