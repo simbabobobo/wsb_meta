@@ -12,6 +12,6 @@ penalty_ueq_obj=parse_mps(example_path)
 
 pso = PSO(func=penalty_obj, n_dim=dimensions, pop=100, max_iter=1000, lb=lb, ub=ub, w=0.8, c1=0.5, c2=0.5)
 best_x, bext_y = pso.run()
-print(f'{demo_func(pso.gbest_x)}\t{pso.gbest_x}')
+print(f'{penalty_obj(pso.gbest_x)}\t{pso.gbest_x}')
 
 
