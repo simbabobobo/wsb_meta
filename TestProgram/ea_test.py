@@ -37,5 +37,5 @@ df = pd.DataFrame(data)
 # 7-11 origin_obj/eq/ueq/eq_number/ueq_number
 #print(df)
 
-df.to_csv(output_path, index=True, mode='a+', header=False)
+#df.to_csv(output_path, index=True, mode='a+', header=False)
 
