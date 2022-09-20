@@ -19,8 +19,8 @@ import os
             #model._data.append([time.time() - model._start, cur_obj, cur_bd])
 
 base_path = os.path.dirname(os.path.dirname(__file__))
-example_path_1 = os.path.join( base_path, 'ModelFile', '30n20b8.mps')
-example_path = os.path.normcase(example_path_1)
+input_path = os.path.join( base_path, 'ModelFile', '30n20b8.mps')
+#example_path = os.path.normcase(example_path_1)
 #example_path = '30n20b8.mps'
 print(example_path)
 
@@ -33,6 +33,8 @@ model = read(example_path)
 #model.tune()
 model.optimize()
 obj_res = model.getObjective().getValue()
+
+#print('objval', model.ObjVal)
 
 #model._obj = None
 #model._bd = None
