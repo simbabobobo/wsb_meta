@@ -16,14 +16,14 @@ def de(fobj, dimensions, lb, ub, precision, mutschema=1, crosschema=1,
 
     # random (0-1) positions for all particles
     pop = np.random.rand(popsize, dimensions)
-    for seq in range(dimensions):
-        if precision[seq] == 'integral':
-            pop[::, seq] = np.round(pop[::, seq])
     min_b, max_b = np.asarray(bounds).T
     diff = np.fabs(min_b - max_b)
     # scale particle positions according to bounds
     pop_denorm = min_b + pop * diff
     # initial objective function value
+    for seq in range(dimensions):
+        if precision[seq] == 'integral':
+            pop_denorm[::, seq] = np.round(pop_denorm[::, seq])
     fitness = np.asarray([fobj(ind) for ind in pop_denorm])
     # global best particle position
     best_idx = np.argmin(fitness)

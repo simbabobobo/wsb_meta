@@ -117,13 +117,10 @@ def parse_mps(mps_file,  eq_penalty_coeff = 3,  ueq_penalty_coeff = 20):
 
     for i in range(len(lb)):
         if str(ub[i]) == 'inf':
-            if col_types[i] == 'integral':
-                ub[i] = 1.0
-                lb[i] = 0.0
+            ub[i] = 10
 
-            else:
-                ub[i] = None
-                lb[i] = None
+
+
 
     return penalty_obj, dimensions, lb, ub, precision, origin_obj, \
            penalty_eq_obj, penalty_ueq_obj
