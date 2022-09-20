@@ -8,7 +8,8 @@ example_path = os.path.join(base_path, 'mps', 'gen-ip054.mps')
 # os.path.join 将目录和文件名合成一个路径
 
 penalty_obj, dimensions, lb, ub, precision, origin_obj, penalty_eq_obj, \
-penalty_ueq_obj = parse_mps(example_path, eq_penalty_coeff = 100,  ueq_penalty_coeff = 100)
+penalty_ueq_obj = parse_mps(example_path, eq_penalty_coeff = 3,  \
+                                                            ueq_penalty_coeff = 20)
 
 # 'mpsfile.mps'
 
