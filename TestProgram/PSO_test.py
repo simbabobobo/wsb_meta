@@ -4,7 +4,7 @@ from PSO import *
 import os
 
 base_path = os.path.dirname(os.path.dirname(__file__))
-example_path = os.path.join('mps', 'gen-ip054.mps')
+example_path = os.path.join(base_path, 'ModelFile', 'gen-ip054.mps')
 # os.path.join 将目录和文件名合成一个路径
 
 penalty_obj, dimensions, lb, ub, precision, origin_obj, penalty_eq_obj, \
