@@ -16,8 +16,8 @@ for i in range(len(Parameter)):
     pm_name = Parameter[i][0]
     pm_value = Parameter[i][1]
     result = grb(input_path, pm_name, pm_value )
-    #result=[result]
+    result=[result]
     df = pd.DataFrame(result)
     print(df)
-    #df.to_csv(output_path, index= False, mode='a+', header=False)
+    df.to_csv(output_path, index= False, mode='a+', header=False)
 
