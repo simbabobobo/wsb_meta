@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 import math
 import test_function
 
+
 class PSO():
     def __init__(self, func, n_dim=None, pop=40, max_iter=150, lb=-1e5, ub=1e5, w=0.8, c1=0.5, c2=0.5):
         self.func = func
