@@ -22,12 +22,12 @@ base_path = os.path.dirname(os.path.dirname(__file__))
 input_path = os.path.join( base_path, 'ModelFile', '30n20b8.mps')
 #example_path = os.path.normcase(example_path_1)
 #example_path = '30n20b8.mps'
-print(example_path)
+print(input_path)
 
 # Build model m here
-model = read(example_path)
+model = read(input_path)
 #model.resetParams()
-#model.setParam("MIPGap",0.001)
+model.setParam("Method",2)
 #model.setParam("GomoryPasses", 0)
 #model.Params.TuneTimeLimit=60
 #model.tune()
