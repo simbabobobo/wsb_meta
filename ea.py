@@ -11,7 +11,7 @@ def de(fobj, dimensions, lb, ub, precision, mutschema=1, crosschema=1,
        crossp=0.2, popsize=200, its=500):
 
     start_time = time.time()
-    print('DE-Start')
+    print('EA-Start')
     bounds = list(zip(lb, ub))
 
     # random (0-1) positions for all particles

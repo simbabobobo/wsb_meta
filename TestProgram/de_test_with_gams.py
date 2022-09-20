@@ -75,7 +75,7 @@ from de import *
 # Parse GAMS file
 ########
 base_path = os.path.dirname(os.path.dirname(__file__))
-example_path = os.path.join(base_path, 'gams', 'pyomo_gdp.gams')
+example_path = os.path.join(base_path, 'GamsFile', 'pyomo_gdp.gams')
 contents = parse_gams(example_path)
 eq_list, ueq_list, obj_func, bounds, binary = gen_model(contents)
 new_obj = add_penalty(obj_func, eq_list, ueq_list)
