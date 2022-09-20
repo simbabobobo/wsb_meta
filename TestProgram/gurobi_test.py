@@ -1,47 +1,23 @@
-from gurobipy import *
-#import csv
-#import time
+from grb_test_func import *
 import os
+import pandas as pd
 
-
-
-#def data_cb(model, where):
-    #if where == GRB.Callback.MIP:
-        #cur_obj = model.cbGet(GRB.Callback.MIP_OBJBST)
-        #cur_bd = model.cbGet(GRB.Callback.MIP_OBJBND)
-        #cur_node=cur_bd = model.cbGet(GRB.Callback.MIP_NODCNT)
-
-
-        # Did objective value or best bound change?
-        #if model._obj != cur_obj or model._bd != cur_bd:
-            #model._obj = cur_obj
-            #model._bd = cur_bd
-            #model._data.append([time.time() - model._start, cur_obj, cur_bd])
-
+Parameter=[['Method', 0.0], ['Method', 1.0], ['Method', 2.0], ['BranchDir', -1.0], ['BranchDir', 1.0], ['Heuristics', 0.0], ['Heuristics', 0.1], ['Heuristics', 0.3], ['Heuristics', 0.5], ['Heuristics', 0.7], ['Heuristics', 1.0], ['MIPFocus', 1.0], ['MIPFocus', 2.0], ['MIPFocus', 3.0], ['VarBranch', 1.0], ['VarBranch', 2.0], ['VarBranch', 3.0], ['Cuts', 0.0], ['Cuts', 1.0], ['Cuts', 2.0], ['Cuts', 3.0], ['CutPasses', 1.0], ['CutPasses', 3.0], ['CutPasses', 5.0], ['GomoryPasses', 0.0]]
 base_path = os.path.dirname(os.path.dirname(__file__))
 input_path = os.path.join( base_path, 'ModelFile', '30n20b8.mps')
-#example_path = os.path.normcase(example_path_1)
-#example_path = '30n20b8.mps'
-print(input_path)
+output_path = os.path.join(base_path, 'Result', 'gurobi_result.csv')
 
-# Build model m here
-model = read(input_path)
-#model.resetParams()
-model.setParam("Method",2)
-#model.setParam("GomoryPasses", 0)
-#model.Params.TuneTimeLimit=60
-#model.tune()
-model.optimize()
-obj_res = model.getObjective().getValue()
+#data = [[1,2,3,4,5,6,7,8,9]]
+#df = pd.DataFrame(data,columns=['pm_name', 'pm_name', 'mipgap','nodes','simplex', 'time','best_obj', 'best_bound', 'gap'])
+#df.to_csv(output_path, index= False, mode='a+', header=True)
 
-#print('objval', model.ObjVal)
 
-#model._obj = None
-#model._bd = None
-#model._data = []
-#model._start = time.time()
-#model.optimize(callback=data_cb)
+for i in range(len(Parameter)):
+    pm_name = Parameter[i][0]
+    pm_value = Parameter[i][1]
+    result = grb(input_path, pm_name, pm_value )
+    result=[result]
+    df = pd.DataFrame(result)
+    print(df)
+    df.to_csv(output_path, index= False, mode='a+', header=False)
 
-#with open('data.csv', 'w') as f:
-    #writer = csv.writer(f)
-    #writer.writerows(model._data)
