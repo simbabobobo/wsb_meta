@@ -19,12 +19,12 @@ import os
             #model._data.append([time.time() - model._start, cur_obj, cur_bd])
 
 base_path = os.path.dirname(os.path.dirname(__file__))
-example_path = os.path.join(base_path, 'ModelFile', 'gen-ip054.mps')
+example_path = os.path.join(base_path, 'ModelFile', '30n20b8.mps')
 
 # Build model m here
 model = read(example_path)
 #model.resetParams()
-model.setParam("MIPGap",0.001)
+#model.setParam("MIPGap",0.001)
 #model.setParam("GomoryPasses", 0)
 #model.Params.TuneTimeLimit=60
 #model.tune()

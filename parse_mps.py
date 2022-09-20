@@ -88,7 +88,7 @@ def parse_mps(mps_file,  eq_penalty_coeff = 3,  ueq_penalty_coeff = 20):
 
     def origin_obj(v):
         ori_value = ori_obj(v)
-
+        print('\nOrigin objective function value:', ori_value)
         return ori_value
 
     def penalty_eq_obj(v):
@@ -104,7 +104,7 @@ def parse_mps(mps_file,  eq_penalty_coeff = 3,  ueq_penalty_coeff = 20):
             if constraint(v) != 0:
                 counter += 1
 
-        print('p_eq_value is', p_eq_value,)
+        print('\np_eq_value is', p_eq_value,)
         print('eq_value is', eq_value, )
         print('number break eq is', counter )
 
@@ -116,13 +116,15 @@ def parse_mps(mps_file,  eq_penalty_coeff = 3,  ueq_penalty_coeff = 20):
         counter=0
 
         for i in ueq_list:
+            #print(i)
             constraint = lambda x: eval(i)
             p_ueq_value += ueq_penalty_coeff * (max(0, constraint(v))) ** 3
             ueq_value.append(constraint(v))
-            if constraint(v) != 0:
+            if constraint(v) > 0:
                 counter += 1
+                # dayu 0 cai wei bei
 
-        print('p_ueq_value is', p_ueq_value, )
+        print('\np_ueq_value is', p_ueq_value, )
         print('ueq_value is', ueq_value, )
         print('number break ueq is', counter)
 
@@ -137,6 +139,7 @@ def parse_mps(mps_file,  eq_penalty_coeff = 3,  ueq_penalty_coeff = 20):
     for i in range(len(lb)):
         if str(ub[i]) == 'inf':
             ub[i] = 10
+            # mo ren up bound wei 10
 
 
 

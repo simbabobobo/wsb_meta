@@ -86,8 +86,8 @@ def de(fobj, dimensions, lb, ub, precision, mutschema=1, crosschema=1,
     end_time = time.time()
     zeit = 0
     zeit = end_time - start_time
-    print('Best objective: ', best_value,'\nTime:', zeit,'seconds')
-    print('Best variable:', best_variable)
+    print('\nBest objective: ', best_value,'\nTime:', zeit,'seconds')
+    print('\nVariable:', best_variable)
 
     yield best_variable, best_value
 
