@@ -1,0 +1,3 @@
+,ModelName,Algorithm,Parameter,Best_obj,Variable,Time,origin_obj,eq,ueq,eq_number,ueq_number
+
+0,PyomoExample.mps,ea,non,38.10129959248434,[4.63634678 6.08438221],3.9269607067108154,38.24656918071849,0,0.14804394106400126,0,1

@@ -105,15 +105,17 @@ def parse_mps(mps_file,  eq_penalty_coeff = 3,  ueq_penalty_coeff = 20):
                 counter += 1
 
         print('\np_eq_value is', p_eq_value,)
-        print('eq_value is', eq_value, )
+        # print('eq_value is', eq_value, )
         print('number break eq is', counter )
+        eq = [p_eq_value, counter]
 
-        return p_eq_value
+        return eq
 
     def penalty_ueq_obj(v):
         p_ueq_value = 0
         ueq_value = []
         counter=0
+        ueq=[]
 
         for i in ueq_list:
             #print(i)
@@ -125,10 +127,11 @@ def parse_mps(mps_file,  eq_penalty_coeff = 3,  ueq_penalty_coeff = 20):
                 # dayu 0 cai wei bei
 
         print('\np_ueq_value is', p_ueq_value, )
-        print('ueq_value is', ueq_value, )
+        # print('ueq_value is', ueq_value, )
         print('number break ueq is', counter)
+        ueq = [p_ueq_value, counter]
 
-        return p_ueq_value
+        return ueq
 
     precision = col_types
 
