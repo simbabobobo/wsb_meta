@@ -1,33 +1,16 @@
 from gurobipy import *
-#import csv
-#import time
 import os
 
 
-
-#def data_cb(model, where):
-    #if where == GRB.Callback.MIP:
-        #cur_obj = model.cbGet(GRB.Callback.MIP_OBJBST)
-        #cur_bd = model.cbGet(GRB.Callback.MIP_OBJBND)
-        #cur_node=cur_bd = model.cbGet(GRB.Callback.MIP_NODCNT)
-
-
-        # Did objective value or best bound change?
-        #if model._obj != cur_obj or model._bd != cur_bd:
-            #model._obj = cur_obj
-            #model._bd = cur_bd
-            #model._data.append([time.time() - model._start, cur_obj, cur_bd])
-
 base_path = os.path.dirname(os.path.dirname(__file__))
-input_path = os.path.join( base_path, 'ModelFile', '30n20b8.mps')
-#example_path = os.path.normcase(example_path_1)
-#example_path = '30n20b8.mps'
+input_path = os.path.join( base_path, 'ModelFile', 'p0201.mps')
+
 print(input_path)
 
-# Build model m here
+
 model = read(input_path)
-#model.resetParams()
-model.setParam("Method",2)
+
+#model.setParam("Method",2)
 #model.setParam("GomoryPasses", 0)
 #model.Params.TuneTimeLimit=60
 #model.tune()
