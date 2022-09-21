@@ -10,7 +10,7 @@ start_time = time.time()
 # 读取文件
 base_path = os.path.dirname(os.path.dirname(__file__))
 modelname = 'PyomoExample.mps'
-input_path = os.path.join(base_path, 'ModelFile', modelname)
+input_path = os.path.join(base_path, 'model_file_mps', modelname)
 # os.path.join 将目录和文件名合成一个路径
 print(input_path)
 
@@ -41,7 +41,7 @@ ueq = penalty_ueq_obj(x)
 
 # 输出结果
 base_path = os.path.dirname(os.path.dirname(__file__))
-output_path = os.path.join(base_path, 'Result', 'metaheuristic.csv')
+output_path = os.path.join(base_path, 'results', 'metaheuristic.csv')
 
 data = [[modelname, algorithm, 'non', best, x, zeit, ori, eq[0], ueq[0], eq[1], ueq[1]]]
 df = pd.DataFrame(data)

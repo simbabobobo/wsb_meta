@@ -3,7 +3,7 @@ import os
 
 
 base_path = os.path.dirname(os.path.dirname(__file__))
-input_path = os.path.join( base_path, 'ModelFile', 'p0201.mps')
+input_path = os.path.join( base_path, 'model_file_mps', 'p0201.mps')
 
 print(input_path)
 
