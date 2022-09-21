@@ -1,7 +1,7 @@
 from gurobipy import *
 
 
-def grb(file, pm_name, pm_value, mipgap =0.001):
+def grb(file, pm_name, pm_value, mipgap =0.0001):
     model = read(file)
     model.setParam("MIPGap", mipgap)
     model.setParam(pm_name, pm_value)
