@@ -1,5 +1,5 @@
 from parse_mps import *
-from ea import *
+from module.ea import *
 import os
 import pandas as pd
 
@@ -18,9 +18,10 @@ penalty_ueq_obj = parse_mps(input_path, eq_penalty_coeff = 3,  \
 
 # 启发算法
 algorithm = 'ea'
-DE = list(de(penalty_obj, dimensions, lb, ub, precision, mut=0.8, crossp=0.6, popsize=200,
+DE = list(de(penalty_obj, dimensions, lb, ub, precision, mut=0.6, crossp=0.6,
+             popsize=200,
              its=100))
-
+# mut=0.8, crossp=0.6, popsize=200, its=100
 # 结束
 
 # 结果
@@ -36,7 +37,8 @@ ueq = penalty_ueq_obj(x)
 base_path = os.path.dirname(os.path.dirname(__file__))
 output_path = os.path.join(base_path, 'Result', 'metaheuristic.csv')
 
-data = [[modelname, algorithm, 'non', best, x, zeit, ori, eq[0], ueq[0], eq[1], ueq[1]]]
+data = [[modelname, algorithm, 'mut=0.6', best, x, zeit, ori, eq[0], ueq[0],
+         eq[1], ueq[1]]]
 df = pd.DataFrame(data)
 # 1-6 ModelName/Algorithm/Parameter/Best_obj/Variable/Time
 # 7-11 origin_obj/eq/ueq/eq_number/ueq_number
