@@ -7,7 +7,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import math
-import test_function
+import module.test_function as test_function
 
 
 class PSO():

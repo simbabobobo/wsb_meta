@@ -1,4 +1,4 @@
-from de import *
+from module.de import *
 
 
 def original_obj(x):

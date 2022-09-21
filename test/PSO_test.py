@@ -1,43 +1,39 @@
-from parse_mps import *
+from module.parse_mps import *
+#from smps_loader import *
+from module.PSO import *
 import os
 import pandas as pd
-from matplotlib import pyplot as plt
-import MFO
-
 import time
 
 # 开始
 start_time = time.time()
-
 # 读取文件
 base_path = os.path.dirname(os.path.dirname(__file__))
 modelname = 'PyomoExample.mps'
-input_path = os.path.join(base_path,'ModelFile', modelname)
+input_path = os.path.join(base_path, 'ModelFile', modelname)
 # os.path.join 将目录和文件名合成一个路径
 print(input_path)
 
 # 解析（mps）
 penalty_obj, dimensions, lb, ub, precision, origin_obj, penalty_eq_obj, \
-penalty_ueq_obj = parse_mps(input_path, eq_penalty_coeff = 3,  \
-                                                            ueq_penalty_coeff = 20)
+penalty_ueq_obj=parse_mps(input_path)
 
 # 启发算法
-algorithm = 'mfo'
-#设置参数
-pop = 30 #种群数量
-MaxIter = 1000 #最大迭代次数
-
-result = MFO.MFO(pop, dimensions, lb, ub, MaxIter, penalty_obj)
+algorithm = 'pso'
+print('PSO Start')
+pso = PSO(func=penalty_obj, n_dim=dimensions, pop=100, max_iter=1000, lb=lb, ub=ub, w=0.8, c1=0.5, c2=0.5)
+result = list(pso.run())
 
 #结束
 end_time = time.time()
 time = end_time - start_time
 
+#print(result[0],result[1])
+
 # 结果
-best = result[0][0]
-x = result[1][0]
+best = result[1]
+x = result[0]
 zeit = time
-Curve = result[2]
 
 ori = origin_obj(x)
 eq = penalty_eq_obj(x)
@@ -52,13 +48,8 @@ df = pd.DataFrame(data)
 # 1-6 ModelName/Algorithm/Parameter/Best_obj/Variable/Time
 # 7-11 origin_obj/eq/ueq/eq_number/ueq_number
 #print(df)
-df.to_csv(output_path, index=True, mode='a+', header=False)
+#df.to_csv(output_path, index=True, mode='a+', header=False)
 
 
-plt.figure(1)
-plt.semilogy(Curve,'r-',linewidth=2)
-plt.xlabel('Iteration',fontsize='medium')
-plt.ylabel("Fitness",fontsize='medium')
-plt.grid()
-plt.title('WOA',fontsize='large')
-#plt.show()
+
+

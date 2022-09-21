@@ -68,8 +68,8 @@ for v in m.component_objects(pyo.Var, active=True):
 import os
 import numpy as pd
 
-from parse_gams import *
-from de import *
+from module.parse_gams import *
+from module.de import *
 
 ########
 # Parse GAMS file
