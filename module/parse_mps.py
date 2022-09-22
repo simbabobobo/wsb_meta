@@ -139,9 +139,14 @@ def parse_mps(mps_file,  eq_penalty_coeff = 3,  ueq_penalty_coeff = 20):
     lb = bnd[bnd_names1]['LO']
     ub = bnd[bnd_names1]['UP']
 
+    k=5
+    maxvalue = k*max(rhs1)
+    if maxvalue >= 1000000:
+        maxvalue = 1000000
+
     for i in range(len(lb)):
         if str(ub[i]) == 'inf':
-            ub[i] = 10
+            ub[i] = maxvalue
             # mo ren up bound wei 10
 
 
