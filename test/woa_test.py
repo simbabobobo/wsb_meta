@@ -11,7 +11,7 @@ start_time = time.time()
 
 # 读取文件
 base_path = os.path.dirname(os.path.dirname(__file__))
-modelname = 'PyomoExample.mps'
+modelname = 'p0201.mps'
 input_path = os.path.join(base_path, 'model_file_mps', modelname)
 # os.path.join 将目录和文件名合成一个路径
 print(input_path)
