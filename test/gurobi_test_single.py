@@ -3,12 +3,12 @@ import os
 
 
 base_path = os.path.dirname(os.path.dirname(__file__))
-input_path = os.path.join( base_path, 'model_file_mps', 'p0201.mps')
+input_path = os.path.join('30n20b8.mps')
 
 print(input_path)
 
 
-model = read(input_path)
+model = read('30n20b8.mps')
 
 #model.setParam("Method",2)
 #model.setParam("GomoryPasses", 0)
