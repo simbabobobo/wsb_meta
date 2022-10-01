@@ -71,6 +71,8 @@ def WOA(pop, dim, lb, ub, MaxIter, fun):
     GbestPositon = np.zeros([1,dim])
     GbestPositon[0,:] = copy.copy(X[0, :])
     Curve = np.zeros([MaxIter, 1])
+    Curve2 = np.zeros([MaxIter, 1])
+    # 生成maxiter*1的各项都为0的多维列表
     for t in range(MaxIter):
         Leader = X[0, :]  # 领头鲸鱼
         a = 2 - t * (2 / MaxIter)  # 线性下降权重2 - 0
@@ -108,5 +110,7 @@ def WOA(pop, dim, lb, ub, MaxIter, fun):
             GbestScore = copy.copy(fitness[0])
             GbestPositon[0,:] = copy.copy(X[0, :])
         Curve[t] = GbestScore
+
+
 
     return GbestScore, GbestPositon, Curve

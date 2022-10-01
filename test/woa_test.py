@@ -11,7 +11,7 @@ start_time = time.time()
 
 # 读取文件
 base_path = os.path.dirname(os.path.dirname(__file__))
-modelname = 'p0201.mps'
+modelname = 'PyomoExample.mps'
 input_path = os.path.join(base_path, 'model_file_mps', modelname)
 # os.path.join 将目录和文件名合成一个路径
 print(input_path)
@@ -54,14 +54,21 @@ data = [[modelname, algorithm, 'non', best, x, zeit, ori, eq[0], ueq[0], eq[1], 
 df = pd.DataFrame(data)
 # 1-6 ModelName/Algorithm/Parameter/Best_obj/Variable/Time
 # 7-11 origin_obj/eq/ueq/eq_number/ueq_number
-#print(df)
-df.to_csv(output_path, index=True, mode='a+', header=False)
+print(df)
+#df.to_csv(output_path, index=True, mode='a+', header=False)
 
+print(type(Curve))
 
-plt.figure(1)
-plt.semilogy(Curve,'r-',linewidth=2)
-plt.xlabel('Iteration',fontsize='medium')
-plt.ylabel("Fitness",fontsize='medium')
+Curve1=[1,2]
+Curve2=[2,3]
+
+plt.figure(2)
+# 标题
+plt.semilogy(Curve1, 'r-', linewidth=2)
+plt.semilogy(Curve2, 'r-', linewidth=2)
+# 绘制y轴上具有对数缩放
+plt.xlabel('Iteration', fontsize='medium')
+plt.ylabel("Fitness", fontsize='medium')
 plt.grid()
-plt.title('WOA',fontsize='large')
-#plt.show()
+plt.title(algorithm, fontsize='large')
+plt.show()
