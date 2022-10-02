@@ -38,8 +38,8 @@ eq = penalty_eq_obj(x)
 ueq = penalty_ueq_obj(x)
 
 # 输出结果
-base_path = os.path.dirname(os.path.dirname(__file__))
 output_path = os.path.join(base_path, 'Result', 'metaheuristic.csv')
+output_path_v = os.path.join(base_path, 'Result', 'meta_variable.csv')
 
 data = [[modelname, algorithm, 'mut=0.6', best, x, zeit, ori, eq[0], ueq[0],
          eq[1], ueq[1]]]
