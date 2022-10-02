@@ -1,4 +1,4 @@
-from gurobipy import *
+import numpy as np
 
-model = read('30n20b8.mps')
-model.optimize()
+Curve = np.zeros([3,2])
+print(Curve)

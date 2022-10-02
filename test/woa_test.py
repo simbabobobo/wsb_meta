@@ -62,7 +62,7 @@ print(type(Curve))
 Curve1=[1,2]
 Curve2=[2,3]
 
-plt.figure(2)
+plt.figure(1)
 # 标题
 plt.semilogy(Curve1, 'r-', linewidth=2)
 plt.semilogy(Curve2, 'r-', linewidth=2)
