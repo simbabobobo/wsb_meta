@@ -30,7 +30,7 @@ MaxIter = 1000 #最大迭代次数
 #GbestScore,GbestPositon,Curve = WOA.WOA(pop, dimensions, lb, ub, MaxIter,
                                         #penalty_obj)
 result = WOA.WOA(pop, dimensions, lb, ub, MaxIter,
-                                        penalty_obj)
+                                        penalty_obj,origin_obj)
 
 #结束
 end_time = time.time()
@@ -40,7 +40,9 @@ time = end_time - start_time
 best = result[0][0]
 x = result[1][0]
 zeit = time
-Curve = result[2]
+curve = result[2]
+curve_ori = result[3]
+
 
 ori = origin_obj(x)
 eq = penalty_eq_obj(x)
@@ -57,15 +59,10 @@ df = pd.DataFrame(data)
 print(df)
 #df.to_csv(output_path, index=True, mode='a+', header=False)
 
-print(type(Curve))
-
-Curve1=[1,2]
-Curve2=[2,3]
-
-plt.figure(1)
+plt.figure(algorithm)
 # 标题
-plt.semilogy(Curve1, 'r-', linewidth=2)
-plt.semilogy(Curve2, 'r-', linewidth=2)
+plt.semilogy(curve, 'r-', linewidth=2)
+plt.semilogy(curve_ori, 'b-', linewidth=2)
 # 绘制y轴上具有对数缩放
 plt.xlabel('Iteration', fontsize='medium')
 plt.ylabel("Fitness", fontsize='medium')

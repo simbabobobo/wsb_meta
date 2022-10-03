@@ -62,7 +62,7 @@ def SortPosition(X, index):
 '''鲸鱼优化算法'''
 
 
-def WOA(pop, dim, lb, ub, MaxIter, fun):
+def WOA(pop, dim, lb, ub, MaxIter, fun, orgj):
     X, lb, ub = initial(pop, dim, ub, lb)  # 初始化种群
     fitness = CaculateFitness(X, fun)  # 计算适应度值
     fitness, sortIndex = SortFitness(fitness)  # 对适应度值排序
@@ -71,7 +71,7 @@ def WOA(pop, dim, lb, ub, MaxIter, fun):
     GbestPositon = np.zeros([1,dim])
     GbestPositon[0,:] = copy.copy(X[0, :])
     Curve = np.zeros([MaxIter, 1])
-    Curve2 = np.zeros([MaxIter, 1])
+    Curve_v = np.zeros([MaxIter, 1])
     # 生成maxiter*1的各项都为0的多维列表
     for t in range(MaxIter):
         Leader = X[0, :]  # 领头鲸鱼
@@ -110,7 +110,8 @@ def WOA(pop, dim, lb, ub, MaxIter, fun):
             GbestScore = copy.copy(fitness[0])
             GbestPositon[0,:] = copy.copy(X[0, :])
         Curve[t] = GbestScore
+        Curve_v[t] = orgj(GbestPositon[0,:])
 
 
 
-    return GbestScore, GbestPositon, Curve
+    return GbestScore, GbestPositon, Curve, Curve_v
