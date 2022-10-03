@@ -15,7 +15,7 @@ def de(fobj, bounds, binary, mut=0.8, crossp=0.2,
             pop[::, seq] = np.round(pop[::, seq])
             # [::,0]是指二维列表所有子列表的第零项；将binary项对应的元素圆整
     min_b, max_b = np.asarray(bounds).T
-    # .T是转置矩阵
+    # .T是转置矩阵; 获取最小值最大值列表
     diff = np.fabs(min_b - max_b)
     # fabs求解x的绝对值
     pop_denorm = min_b + pop * diff
