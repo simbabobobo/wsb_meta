@@ -14,9 +14,9 @@ print(input_path)
 
 # 解析（mps）
 penalty_obj, dimensions, lb, ub, precision, origin_obj, penalty_eq_obj, \
-penalty_ueq_obj = parse_mps(input_path, eq_penalty_coeff = 3,  \
-                                                            ueq_penalty_coeff = 20)
-
+penalty_ueq_obj = parse_mps(input_path, eq_penalty_coeff = 100,  \
+                                                            ueq_penalty_coeff = 100)
+# 3/20
 # 启发算法
 algorithm = 'ea'
 DE = list(de(penalty_obj, origin_obj, dimensions, lb, ub, precision, mut=0.6,
