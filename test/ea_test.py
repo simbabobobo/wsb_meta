@@ -7,7 +7,7 @@ from matplotlib import pyplot as plt
 # 读取文件
 base_path = os.path.dirname(os.path.dirname(__file__))
 # example_path = os.path.join(base_path, 'ModelFile', 'gen-ip054.mps')
-modelname = 'p0201.mps'
+modelname = 'PyomoExample.mps'
 input_path = os.path.join(base_path, 'model_file_mps', modelname)
 # os.path.join 将目录和文件名合成一个路径
 print(input_path)
@@ -49,8 +49,8 @@ df_v = pd.DataFrame(data_v)
 # 1-6 ModelName/Algorithm/Parameter/Best_obj/Variable/Time
 # 7-11 origin_obj/eq/ueq/eq_number/ueq_number
 print(df)
-df.to_csv(output_path, index=True, mode='a+', header=False)
-df_v.to_csv(output_path_v, index=True, mode='a+', header=False)
+#df.to_csv(output_path, index=True, mode='a+', header=False)
+#df_v.to_csv(output_path_v, index=True, mode='a+', header=False)
 plt.figure(algorithm)
 # 标题
 plt.semilogy(curve, 'r-', linewidth=2)

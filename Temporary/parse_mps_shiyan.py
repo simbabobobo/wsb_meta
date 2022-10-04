@@ -2,7 +2,7 @@ from module.smps_loader import *
 # 将mps文件所对应的 有约束模型 利用 惩罚函数 输出为 无约束模型 输出为：目标函数、维度、下界、上界、精度、惩罚函数值
 
 
-def parse_mps(mps_file,  eq_penalty_coeff = 3,  ueq_penalty_coeff = 20, ):
+def parse_mps(mps_file,  eq_penalty_coeff = 3,  ueq_penalty_coeff = 20, k=5 ):
 
     name, objective_name, row_names, col_names, col_types, types, c, A, \
     rhs_names, rhs, bnd_names, bnd = load_mps(mps_file)
@@ -139,7 +139,7 @@ def parse_mps(mps_file,  eq_penalty_coeff = 3,  ueq_penalty_coeff = 20, ):
     lb = bnd[bnd_names1]['LO']
     ub = bnd[bnd_names1]['UP']
 
-    k=5
+
     maxvalue = k*max(rhs1)
     if maxvalue >= 1000000:
         maxvalue = 1000000
