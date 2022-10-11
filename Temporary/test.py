@@ -8,4 +8,4 @@ def test(a,b,d=1,e=2):
     return testa
 
 h=test(1,2)
-print(h(1,d=2,e=3))
+print(h(1,2,3))

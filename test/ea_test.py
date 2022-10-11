@@ -22,7 +22,7 @@ algorithm = 'ea'
 DE = list(de(penalty_obj, origin_obj, dimensions, lb, ub, precision, mut=0.6,
              crossp=0.6,
              popsize=200,
-             its=1000))
+             its=100))
 # mut=0.8, crossp=0.6, popsize=200, its=100
 # 结束
 
@@ -49,7 +49,7 @@ df_v = pd.DataFrame(data_v)
 # 1-6 ModelName/Algorithm/Parameter/Best_obj/Variable/Time
 # 7-11 origin_obj/eq/ueq/eq_number/ueq_number
 print(df)
-#df.to_csv(output_path, index=True, mode='a+', header=False)
+df.to_csv(output_path, index=True, mode='a+', header=False)
 #df_v.to_csv(output_path_v, index=True, mode='a+', header=False)
 plt.figure(algorithm)
 # 标题

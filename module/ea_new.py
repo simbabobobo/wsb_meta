@@ -13,6 +13,8 @@ def de(fobj, orgj, dimensions, lb, ub, precision, mutschema=1, crosschema=1,
     start_time = time.time()
     print('EA Start')
     bounds = list(zip(lb, ub))
+    eq_penalty_coeff=1
+    ueq_penalty_coeff=1
 
     # random (0-1) positions for all particles
     pop = np.random.rand(popsize, dimensions)
@@ -25,13 +27,15 @@ def de(fobj, orgj, dimensions, lb, ub, precision, mutschema=1, crosschema=1,
     for seq in range(dimensions):
         if precision[seq] == 'integral':
             pop_denorm[::, seq] = np.round(pop_denorm[::, seq])
-    fitness = np.asarray([fobj(ind) for ind in pop_denorm])
+    fitness = np.asarray([fobj(ind, eq_penalty_coeff,  ueq_penalty_coeff) for ind in pop_denorm])
     # global best particle position
     best_idx = np.argmin(fitness)
     best_variable = pop_denorm[best_idx]
     curve = np.zeros([its, 1])
     curve_ori = np.zeros([its, 1])
     for i in range(its):
+        eq_penalty_coeff += 1
+        ueq_penalty_coeff += 1
         for j in range(popsize):
             # get indices of all particles except current
             idxs = [idx for idx in range(popsize) if idx != j]
@@ -77,7 +81,8 @@ def de(fobj, orgj, dimensions, lb, ub, precision, mutschema=1, crosschema=1,
                 trial = np.where(cross_points, mutant, pop[j])
                 # Exponential (exp)
             trial_denorm = min_b + trial * diff
-            f = fobj(trial_denorm)
+            f = fobj(trial_denorm,eq_penalty_coeff,ueq_penalty_coeff)
+            print(eq_penalty_coeff,ueq_penalty_coeff)
             if f < fitness[j]:
                 fitness[j] = f
                 pop[j] = trial
