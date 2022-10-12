@@ -1,11 +1,8 @@
+from gurobipy import *
 
-def test(a,b,d=1,e=2):
-    c=a+b
-
-    def testa(f,d=1,e=2):
-        g=f+d+e
-        return g
-    return testa
-
-h=test(1,2)
-print(h(1,2,3))
+base_path = os.path.dirname(os.path.dirname(__file__))
+input_path = os.path.join('model_file_mps', 'PyomoExample.mps')
+model = read(input_path)
+model.optimize()
+time_grb = model.Runtime
+best_grb = model.ObjVal

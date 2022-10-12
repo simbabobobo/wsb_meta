@@ -20,14 +20,19 @@ def ParameterSetting():
     xMax = [8, 7.5]             # 给定搜索空间的上限，x1_max,..xn_max
     tInitial = 100.0            # 设定初始退火温度(initial temperature)
     tFinal  = 1                 # 设定终止退火温度(stop temperature)
-    alfa    = 0.98              # 设定降温参数，T(k)=alfa*T(k-1)
+    alfa = 0.98              # 设定降温参数，T(k)=alfa*T(k-1)
     meanMarkov = 100            # Markov链长度，也即内循环运行次数
     scale   = 0.5               # 定义搜索步长，可以设为固定值或逐渐缩小
     return cName, nVar, xMin, xMax, tInitial, tFinal, alfa, meanMarkov, scale
 
 # 模拟退火算法
-def OptimizationSSA(nVar,xMin,xMax,tInitial,tFinal,alfa,meanMarkov,scale):
+
+def OptimizationSSA(fobj, orgj, dimensions, lb, ub, precision,tInitial =
+100.0, tFinal  = 1,alfa = 0.98,meanMarkov = 100,scale = 0.5):
     # ====== 初始化随机数发生器 ======
+    nVar=dimensions
+    xMin=lb
+    xMax=ub
     randseed = random.randint(1, 100)
     random.seed(randseed)  # 随机数发生器设置种子，也可以设为指定整数
     # ====== 随机产生优化问题的初始解 ======
@@ -37,7 +42,7 @@ def OptimizationSSA(nVar,xMin,xMax,tInitial,tFinal,alfa,meanMarkov,scale):
         xInitial[v] = random.uniform(xMin[v], xMax[v])
 
     # 调用子函数 cal_Energy 计算当前解的目标函数值
-    fxInitial = cal_Energy(xInitial, nVar, 1) # m(k)：惩罚因子，初值为 1
+    fxInitial = fobj(xInitial) # m(k)：惩罚因子，初值为 1
     # ====== 模拟退火算法初始化 ======
     xNew = np.zeros((nVar))         # 初始化，创建数组
     xNow = np.zeros((nVar))         # 初始化，创建数组

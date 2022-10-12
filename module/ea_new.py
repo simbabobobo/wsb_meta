@@ -5,7 +5,9 @@ import numpy as np
 import time
 
 
-def de(fobj, orgj, dimensions, lb, ub, precision, mutschema=1, crosschema=1,
+def de(fobj, orgj, dimensions, lb, ub, precision, best_grb,time_grb=3600,
+       mutschema=3,
+       crosschema=1,
        mut=0.8,
        mut2=0.8,
        crossp=0.2, popsize=200, its=500):
@@ -82,7 +84,7 @@ def de(fobj, orgj, dimensions, lb, ub, precision, mutschema=1, crosschema=1,
                 # Exponential (exp)
             trial_denorm = min_b + trial * diff
             f = fobj(trial_denorm,eq_penalty_coeff,ueq_penalty_coeff)
-            print(eq_penalty_coeff,ueq_penalty_coeff)
+            #print(eq_penalty_coeff,ueq_penalty_coeff)
             if f < fitness[j]:
                 fitness[j] = f
                 pop[j] = trial
@@ -91,12 +93,21 @@ def de(fobj, orgj, dimensions, lb, ub, precision, mutschema=1, crosschema=1,
                     best_variable = trial_denorm
         curve[i] = fitness[best_idx]
         curve_ori[i] = orgj(best_variable)
-    best_value = fitness[best_idx]
-    end_time = time.time()
-    zeit = end_time - start_time
-    print('\nBest objective: ', best_value,'\nTime:', zeit,'seconds')
-    print('Variable:', best_variable)
+        best_value = fitness[best_idx]
+        end_time = time.time()
+        zeit = end_time - start_time
+        if zeit > time_grb:
+            return best_variable, best_value, zeit, curve, curve_ori
+        if best_value < best_grb:
+            return best_variable, best_value, zeit, curve, curve_ori
 
-    yield best_variable, best_value, zeit, curve, curve_ori
+    #best_value = fitness[best_idx]
+    #end_time = time.time()
+    #zeit = end_time - start_time
+    #print('\nBest objective: ', best_value,'\nTime:', zeit,'seconds')
+    #print('Variable:', best_variable)
+
+    #yield best_variable, best_value, zeit, curve, curve_ori
+    return best_variable, best_value, zeit, curve, curve_ori
 
 

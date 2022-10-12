@@ -3,14 +3,23 @@ from module.ea_new import *
 import os
 import pandas as pd
 from matplotlib import pyplot as plt
+from gurobipy import *
 
 # 读取文件
 base_path = os.path.dirname(os.path.dirname(__file__))
 # example_path = os.path.join(base_path, 'ModelFile', 'gen-ip054.mps')
 modelname = 'PyomoExample.mps'
 input_path = os.path.join(base_path, 'model_file_mps', modelname)
+
 # os.path.join 将目录和文件名合成一个路径
 print(input_path)
+
+#gurobi求解
+model = read(modelname)
+model.optimize()
+time_grb = model.Runtime
+best_grb = model.ObjVal
+print('grb is', time_grb,best_grb)
 
 # 解析（mps）
 penalty_obj, dimensions, lb, ub, precision, origin_obj, penalty_eq_obj, \
@@ -19,19 +28,26 @@ penalty_ueq_obj = parse_mps(input_path, eq_penalty_coeff = 100,  \
 # 3/20
 # 启发算法
 algorithm = 'ea'
-DE = list(de(penalty_obj, origin_obj, dimensions, lb, ub, precision, mut=0.6,
+DE = list(de(penalty_obj, origin_obj, dimensions, lb, ub, precision,
+              best_grb,time_grb, mut=0.6,
              crossp=0.6,
              popsize=200,
              its=100))
 # mut=0.8, crossp=0.6, popsize=200, its=100
 # 结束
+#print(DE)
 
 # 结果
-best = DE[0][1]
-x = DE[0][0]
-zeit = DE[0][2]
-curve = DE[0][3]
-curve_ori = DE[0][4]
+#best = DE[0][1]
+#x = DE[0][0]
+#zeit = DE[0][2]
+#curve = DE[0][3]
+#curve_ori = DE[0][4]
+best = DE[1]
+x = DE[0]
+zeit = DE[2]
+curve = DE[3]
+curve_ori = DE[4]
 
 ori = origin_obj(x)
 eq = penalty_eq_obj(x)
@@ -48,8 +64,8 @@ df = pd.DataFrame(data)
 df_v = pd.DataFrame(data_v)
 # 1-6 ModelName/Algorithm/Parameter/Best_obj/Variable/Time
 # 7-11 origin_obj/eq/ueq/eq_number/ueq_number
-print(df)
-df.to_csv(output_path, index=True, mode='a+', header=False)
+print('ea',best, zeit)
+#df.to_csv(output_path, index=True, mode='a+', header=False)
 #df_v.to_csv(output_path_v, index=True, mode='a+', header=False)
 plt.figure(algorithm)
 # 标题
