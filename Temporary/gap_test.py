@@ -9,7 +9,7 @@ base_path = os.path.dirname(os.path.dirname(__file__))
 output_path = os.path.join(base_path, 'results', 'gap_result.csv')
 
 # Parameter=[['p0201', 0.0001], ['p0201', 0.001], ['p0201', 0.01], ['neos-3754480-nidda', 0.0001], ['neos-3754480-nidda', 0.001], ['neos-3754480-nidda', 0.01], ['gen-ip054', 0.0001], ['gen-ip054', 0.001], ['gen-ip054', 0.01]]
-Parameter=[['proteindesign121hz512p9.mps', 0.01]]
+Parameter=[['traininstance2', 0.0001],['traininstance2', 0.001],['traininstance2', 0.01]]
 #
 
 
