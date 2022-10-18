@@ -1,106 +1,145 @@
+""""
+Simple code for Distributed ES proposed by OpenAI.
+Based on this paper: Evolution Strategies as a Scalable Alternative to Reinforcement Learning
+Details can be found in : https://arxiv.org/abs/1703.03864
+Visit more on my tutorial site: https://mofanpy.com/tutorials/
 """
-A simple example for Reinforcement Learning using table lookup Q-learning method.
-An agent "o" is on the left of a 1 dimensional world, the treasure is on the rightmost location.
-Run this program and to see how the agent will improve its strategy of finding the treasure.
-View more on my tutorial page: https://morvanzhou.github.io/tutorials/
-"""
-
 import numpy as np
-import pandas as pd
+import gym
+import multiprocessing as mp
 import time
 
-np.random.seed(2)  # reproducible
+N_KID = 10                  # half of the training population
+N_GENERATION = 5000         # training step
+LR = .05                    # learning rate
+SIGMA = .05                 # mutation strength or step size
+N_CORE = mp.cpu_count()-1
+CONFIG = [
+    dict(game="CartPole-v0",
+         n_feature=4, n_action=2, continuous_a=[False], ep_max_step=700, eval_threshold=500),
+    dict(game="MountainCar-v0",
+         n_feature=2, n_action=3, continuous_a=[False], ep_max_step=200, eval_threshold=-120),
+    dict(game="Pendulum-v0",
+         n_feature=3, n_action=1, continuous_a=[True, 2.], ep_max_step=200, eval_threshold=-180)
+][2]    # choose your game
 
 
-N_STATES = 6   # the length of the 1 dimensional world
-ACTIONS = ['left', 'right']     # available actions
-EPSILON = 0.9   # greedy police
-ALPHA = 0.1     # learning rate
-GAMMA = 0.9    # discount factor
-MAX_EPISODES = 13   # maximum episodes
-FRESH_TIME = 0.3    # fresh time for one move
+def sign(k_id): return -1. if k_id % 2 == 0 else 1.  # mirrored sampling
 
 
-def build_q_table(n_states, actions):
-    table = pd.DataFrame(
-        np.zeros((n_states, len(actions))),     # q_table initial values
-        columns=actions,    # actions's name
-    )
-    # print(table)    # show table
-    return table
+class SGD(object):                      # optimizer with momentum
+    def __init__(self, params, learning_rate, momentum=0.9):
+        self.v = np.zeros_like(params).astype(np.float32)
+        self.lr, self.momentum = learning_rate, momentum
+
+    def get_gradients(self, gradients):
+        self.v = self.momentum * self.v + (1. - self.momentum) * gradients
+        return self.lr * self.v
 
 
-def choose_action(state, q_table):
-    # This is how to choose an action
-    state_actions = q_table.iloc[state, :]
-    if (np.random.uniform() > EPSILON) or ((state_actions == 0).all()):  # act non-greedy or state-action have no value
-        action_name = np.random.choice(ACTIONS)
-    else:   # act greedy
-        action_name = state_actions.idxmax()    # replace argmax to idxmax as argmax means a different function in newer version of pandas
-    return action_name
+def params_reshape(shapes, params):     # reshape to be a matrix
+    p, start = [], 0
+    for i, shape in enumerate(shapes):  # flat params to matrix
+        n_w, n_b = shape[0] * shape[1], shape[1]
+        p = p + [params[start: start + n_w].reshape(shape),
+                 params[start + n_w: start + n_w + n_b].reshape((1, shape[1]))]
+        start += n_w + n_b
+    return p
 
 
-def get_env_feedback(S, A):
-    # This is how agent will interact with the environment
-    if A == 'right':    # move right
-        if S == N_STATES - 2:   # terminate
-            S_ = 'terminal'
-            R = 1
-        else:
-            S_ = S + 1
-            R = 0
-    else:   # move left
-        R = 0
-        if S == 0:
-            S_ = S  # reach the wall
-        else:
-            S_ = S - 1
-    return S_, R
+def get_reward(shapes, params, env, ep_max_step, continuous_a, seed_and_id=None,):
+    # perturb parameters using seed
+    if seed_and_id is not None:
+        seed, k_id = seed_and_id
+        np.random.seed(seed)
+        params += sign(k_id) * SIGMA * np.random.randn(params.size)
+    p = params_reshape(shapes, params)
+    # run episode
+    s = env.reset()
+    ep_r = 0.
+    for step in range(ep_max_step):
+        a = get_action(p, s, continuous_a)
+        s, r, done, _ = env.step(a)
+        # mountain car's reward can be tricky
+        if env.spec._env_name == 'MountainCar' and s[0] > -0.1: r = 0.
+        ep_r += r
+        if done: break
+    return ep_r
 
 
-def update_env(S, episode, step_counter):
-    # This is how environment be updated
-    env_list = ['-']*(N_STATES-1) + ['T']   # '---------T' our environment
-    if S == 'terminal':
-        interaction = 'Episode %s: total_steps = %s' % (episode+1, step_counter)
-        print('\r{}'.format(interaction), end='')
-        time.sleep(2)
-        print('\r                                ', end='')
-    else:
-        env_list[S] = 'o'
-        interaction = ''.join(env_list)
-        print('\r{}'.format(interaction), end='')
-        time.sleep(FRESH_TIME)
+def get_action(params, x, continuous_a):
+    x = x[np.newaxis, :]
+    x = np.tanh(x.dot(params[0]) + params[1])
+    x = np.tanh(x.dot(params[2]) + params[3])
+    x = x.dot(params[4]) + params[5]
+    if not continuous_a[0]: return np.argmax(x, axis=1)[0]      # for discrete action
+    else: return continuous_a[1] * np.tanh(x)[0]                # for continuous action
 
 
-def rl():
-    # main part of RL loop
-    q_table = build_q_table(N_STATES, ACTIONS)
-    for episode in range(MAX_EPISODES):
-        step_counter = 0
-        S = 0
-        is_terminated = False
-        update_env(S, episode, step_counter)
-        while not is_terminated:
+def build_net():
+    def linear(n_in, n_out):  # network linear layer
+        w = np.random.randn(n_in * n_out).astype(np.float32) * .1
+        b = np.random.randn(n_out).astype(np.float32) * .1
+        return (n_in, n_out), np.concatenate((w, b))
+    s0, p0 = linear(CONFIG['n_feature'], 30)
+    s1, p1 = linear(30, 20)
+    s2, p2 = linear(20, CONFIG['n_action'])
+    return [s0, s1, s2], np.concatenate((p0, p1, p2))
 
-            A = choose_action(S, q_table)
-            S_, R = get_env_feedback(S, A)  # take action & get next state and reward
-            q_predict = q_table.loc[S, A]
-            if S_ != 'terminal':
-                q_target = R + GAMMA * q_table.iloc[S_, :].max()   # next state is not terminal
-            else:
-                q_target = R     # next state is terminal
-                is_terminated = True    # terminate this episode
 
-            q_table.loc[S, A] += ALPHA * (q_target - q_predict)  # update
-            S = S_  # move to next state
+def train(net_shapes, net_params, optimizer, utility, pool):
+    # pass seed instead whole noise matrix to parallel will save your time
+    noise_seed = np.random.randint(0, 2 ** 32 - 1, size=N_KID, dtype=np.uint32).repeat(2)    # mirrored sampling
 
-            update_env(S, episode, step_counter+1)
-            step_counter += 1
-    return q_table
+    # distribute training in parallel
+    jobs = [pool.apply_async(get_reward, (net_shapes, net_params, env, CONFIG['ep_max_step'], CONFIG['continuous_a'],
+                                          [noise_seed[k_id], k_id], )) for k_id in range(N_KID*2)]
+    rewards = np.array([j.get() for j in jobs])
+    kids_rank = np.argsort(rewards)[::-1]               # rank kid id by reward
+
+    cumulative_update = np.zeros_like(net_params)       # initialize update values
+    for ui, k_id in enumerate(kids_rank):
+        np.random.seed(noise_seed[k_id])                # reconstruct noise using seed
+        cumulative_update += utility[ui] * sign(k_id) * np.random.randn(net_params.size)
+
+    gradients = optimizer.get_gradients(cumulative_update/(2*N_KID*SIGMA))
+    return net_params + gradients, rewards
 
 
 if __name__ == "__main__":
-    q_table = rl()
-    print('\r\nQ-table:\n')
-    print(q_table)
+    # utility instead reward for update parameters (rank transformation)
+    base = N_KID * 2    # *2 for mirrored sampling
+    rank = np.arange(1, base + 1)
+    util_ = np.maximum(0, np.log(base / 2 + 1) - np.log(rank))
+    utility = util_ / util_.sum() - 1 / base
+
+    # training
+    net_shapes, net_params = build_net()
+    env = gym.make(CONFIG['game']).unwrapped
+    optimizer = SGD(net_params, LR)
+    pool = mp.Pool(processes=N_CORE)
+    mar = None      # moving average reward
+    for g in range(N_GENERATION):
+        t0 = time.time()
+        net_params, kid_rewards = train(net_shapes, net_params, optimizer, utility, pool)
+
+        # test trained net without noise
+        net_r = get_reward(net_shapes, net_params, env, CONFIG['ep_max_step'], CONFIG['continuous_a'], None,)
+        mar = net_r if mar is None else 0.9 * mar + 0.1 * net_r       # moving average reward
+        print(
+            'Gen: ', g,
+            '| Net_R: %.1f' % mar,
+            '| Kid_avg_R: %.1f' % kid_rewards.mean(),
+            '| Gen_T: %.2f' % (time.time() - t0),)
+        if mar >= CONFIG['eval_threshold']: break
+
+    # test
+    print("\nTESTING....")
+    p = params_reshape(net_shapes, net_params)
+    while True:
+        s = env.reset()
+        for _ in range(CONFIG['ep_max_step']):
+            env.render()
+            a = get_action(p, s, CONFIG['continuous_a'])
+            s, _, done, _ = env.step(a)
+            if done: break
