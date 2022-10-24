@@ -43,6 +43,7 @@ def output(best, x, zeit, ori_obj, p_eq, p_ueq):
     df.to_csv(output_path, index=True, mode='a+', header=False)
     #df_v.to_csv(output_path_v, index=True, mode='a+', header=False)
 
+
 def bild(curve,curve_ori,zeit):
     zeit1=str(zeit)+'seconds'
     plt.figure(algorithm)
@@ -56,8 +57,6 @@ def bild(curve,curve_ori,zeit):
     plt.title(zeit1, fontsize='large')
     plt.show()
 
-
-
 """
 penalty_obj, dimensions, low, up, 
 precision, ori_obj, penalty_eq_obj, penalty_ueq_obj
@@ -69,7 +68,7 @@ if __name__ == "__main__":
     input_path = lesen(model)
     GR = gurobi(input_path)
     PR = parse_mps(input_path, penalty_coeff=100000)
-    DE = de(PR[0], PR[5], PR[1], PR[2], PR[3], PR[4], GR[0], GR[1],
+    DE = de(PR[0], PR[5], PR[1], PR[2], PR[3], PR[4], GR[0], time_grb=100,
             mutschema=3, crosschema=1, mut=0.8, mut2=0.8, crossp=0.2,
             popsize=200, its=100)
     # mut=0.8, crossp=0.6, popsize=200, its=100

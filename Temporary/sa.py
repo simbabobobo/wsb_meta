@@ -129,6 +129,7 @@ def ResultOutput(cName,nVar,xBest,fxBest,kIter,recordFxNow,recordFxBest,recordPB
         for i in range(nVar):
             print('\tx[{}] = {:.6f}'.format(i,xBest[i]))
         print('\n\tf(x):{:.6f}'.format(cal_Energy(xBest,nVar,0)))
+        print(kIter)
     return
 def main(): # YouCans, XUPT
     # 参数设置，优化问题参数定义，模拟退火算法参数设置

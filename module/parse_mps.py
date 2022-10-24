@@ -227,7 +227,7 @@ def parse_mps(mps_file, penalty_coeff=100000):
     eq, ueq = generate_cons()
     # 生成等式和不等式约束
 
-    def penalty_obj(var, typ=1, t=0):
+    def penalty_obj(var, typ=1, t=1):
         obj = ori_obj(var)
 
         if typ == 1:
@@ -240,7 +240,6 @@ def parse_mps(mps_file, penalty_coeff=100000):
                 ueq_method = lambda x: eval(equation)
                 obj += penalty_coeff * (max(0, ueq_method(var)))
         if typ == 2:
-            print(t)
             for i in range(len(eq)):
                 equation = eq[i]
                 eq_method = lambda x: eval(equation)
@@ -249,6 +248,15 @@ def parse_mps(mps_file, penalty_coeff=100000):
                 equation = ueq[i]
                 ueq_method = lambda x: eval(equation)
                 obj += (500 * t)**2 * (max(0, ueq_method(var)))
+        if typ == 3:
+            for i in range(len(eq)):
+                equation = eq[i]
+                eq_method = lambda x: eval(equation)
+                obj += t * (max(0, abs(eq_method(var))))**2
+            for i in range(len(ueq)):
+                equation = ueq[i]
+                ueq_method = lambda x: eval(equation)
+                obj += t * (max(0, ueq_method(var)))**2
 
         return obj
     # 生成惩罚函数

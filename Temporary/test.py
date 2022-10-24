@@ -1,8 +1,12 @@
-from gurobipy import *
+import numpy as np
+k=0
+a=100
+b=1
+while a>=1:
+    k+=1
+    a=a*0.98
+print(k)
 
-base_path = os.path.dirname(os.path.dirname(__file__))
-input_path = os.path.join('model_file_mps', 'PyomoExample.mps')
-model = read(input_path)
-model.optimize()
-time_grb = model.Runtime
-best_grb = model.ObjVal
+
+
+
