@@ -15,7 +15,7 @@ def de(fobj, orgj, dimensions, lb, ub, precision, best_grb,time_grb=3600,
     start_time = time.time()
     print('EA Start')
     bounds = list(zip(lb, ub))
-    t=100
+    t=1
     typ = 2
 
     # random (0-1) positions for all particles
@@ -39,7 +39,7 @@ def de(fobj, orgj, dimensions, lb, ub, precision, best_grb,time_grb=3600,
     curve = np.zeros([its, 1])
     curve_ori = np.zeros([its, 1])
     for i in range(its):
-        t -= 1
+        t += 1
         for j in range(popsize):
             # get indices of all particles except current
             idxs = [idx for idx in range(popsize) if idx != j]

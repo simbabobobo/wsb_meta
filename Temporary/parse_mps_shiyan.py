@@ -1,4 +1,4 @@
-from module.smps_loader import *
+from unimportant.smps_loader import *
 # 将mps文件所对应的 有约束模型 利用 惩罚函数 输出为 无约束模型 输出为：目标函数、维度、下界、上界、精度、惩罚函数值
 
 

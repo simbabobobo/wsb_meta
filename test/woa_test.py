@@ -2,7 +2,7 @@ from module.parse_mps import *
 import os
 import pandas as pd
 from matplotlib import pyplot as plt
-import module.WOA as WOA
+import module.woa as WOA
 import numpy as np
 import time
 

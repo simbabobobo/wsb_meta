@@ -7,7 +7,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import math
-import module.test_function as test_function
+
 
 
 class PSO():
@@ -76,15 +76,3 @@ class PSO():
         self.best_x, self.best_y = self.gbest_x, self.gbest_y
         return self.best_x, self.best_y
 
-if __name__ == '__main__':
-    n_dim = 30
-    lb = [-100 for i in range(n_dim)]
-    ub = [100 for i in range(n_dim)]
-    demo_func = test_function.fu2
-    pop_size = 100
-    max_iter = 1000
-    pso = PSO(func=demo_func, n_dim=n_dim, pop=100, max_iter=1000, lb=lb, ub=ub, w=0.8, c1=0.5, c2=0.5)
-    best_x, bext_y = pso.run()
-    print(f'{demo_func(pso.gbest_x)}\t{pso.gbest_x}')
-    # plt.plot(pso.gbest_y_hist)
-    # plt.show()

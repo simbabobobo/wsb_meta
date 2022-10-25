@@ -1,5 +1,5 @@
 from module.parse_mps import *
-from module.SA import *
+from module.sa import *
 import os
 import pandas as pd
 from matplotlib import pyplot as plt

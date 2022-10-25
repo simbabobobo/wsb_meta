@@ -2,7 +2,7 @@ from module.parse_mps import *
 import os
 import pandas as pd
 from matplotlib import pyplot as plt
-import module.MFO as MFO
+import module.mfo as MFO
 import time
 
 # 开始

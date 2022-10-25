@@ -1,6 +1,6 @@
 from module.parse_mps import *
 #from smps_loader import *
-from module.PSO import *
+from module.pso import *
 import os
 import pandas as pd
 import time

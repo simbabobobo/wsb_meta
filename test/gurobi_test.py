@@ -1,4 +1,4 @@
-from module.grb_test_func import *
+from module.grb import *
 import os
 import pandas as pd
 
