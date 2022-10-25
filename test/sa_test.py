@@ -68,7 +68,7 @@ if __name__ == "__main__":
     input_path = lesen(model)
     GR = gurobi(input_path)
     PR = parse_mps(input_path, penalty_coeff=100000)
-    SA = sa(PR[0], PR[5], PR[1], PR[2], PR[3], PR[4], GR[0], time_grb=100)
+    SA = sa(PR[0], PR[5], PR[1], PR[2], PR[3], PR[4], GR[0], time_grb=3600)
     output(SA[1], SA[0], SA[2],PR[5], PR[6], PR[7])
     bild(SA[3], SA[4],SA[2])
 
