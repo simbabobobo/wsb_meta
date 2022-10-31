@@ -3,16 +3,16 @@ import os
 
 
 base_path = os.path.dirname(os.path.dirname(__file__))
-input_path = os.path.join('30n20b8.mps')
+input_path = os.path.join(base_path, 'model_file_mps', 'markshare2.mps')
 
 print(input_path)
 
 
-model = read('30n20b8.mps')
+model = read(input_path)
 
 #model.setParam("Method",2)
 #model.setParam("GomoryPasses", 0)
-#model.Params.TuneTimeLimit=60
+model.Params.TuneTimeLimit=100
 #model.tune()
 model.optimize()
 obj_res = model.getObjective().getValue()

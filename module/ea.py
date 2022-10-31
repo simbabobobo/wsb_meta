@@ -36,9 +36,15 @@ def de(fobj, orgj, dimensions, lb, ub, precision, time_limit=3600,
     best_variable = pop_denorm[best_idx]
     best_value = 0
     zeit = 0
+    zwischen_time = time.time()
+    zeit_1 = zwischen_time - start_time
+    if zeit_1 > time_limit:
+        return best_variable, best_value, zeit, curve, curve_ori
+
     curve = np.zeros([its, 1])
     curve_ori = np.zeros([its, 1])
     for i in range(its):
+        print('its is', t)
         t += 1
         for j in range(popsize):
             # get indices of all particles except current
@@ -73,6 +79,7 @@ def de(fobj, orgj, dimensions, lb, ub, precision, time_limit=3600,
             trial = []
             if crosschema == 1:
                 cross_points = np.random.rand(dimensions) < crossp
+                # generate random number if < crossp: it is True else Flase
                 if not np.any(cross_points):
                     cross_points[np.random.randint(0, dimensions)] = True
                 trial = np.where(cross_points, mutant, pop[j])
