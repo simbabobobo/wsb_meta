@@ -3,11 +3,7 @@ import os
 
 
 base_path = os.path.dirname(os.path.dirname(__file__))
-<<<<<<< HEAD
-input_path = os.path.join(base_path, 'model_file_mps', 'markshare2.mps')
-=======
 input_path = os.path.join(base_path, 'model_file_mps', 'neos-2657525-crna.mps')
->>>>>>> 28769de2d1110b9e1a564f26503f18aaf2273879
 
 print(input_path)
 
