@@ -5,7 +5,7 @@ import numpy as np
 import time
 
 
-def de(fobj, orgj, dimensions, lb, ub, precision, best_grb,time_grb=3600,
+def de(fobj, orgj, dimensions, lb, ub, precision, best_grb=10000,time_grb=3600,
        mutschema=3,
        crosschema=1,
        mut=0.8,
@@ -100,8 +100,8 @@ def de(fobj, orgj, dimensions, lb, ub, precision, best_grb,time_grb=3600,
         zeit = end_time - start_time
         if zeit > time_grb:
             return best_variable, best_value, zeit, curve, curve_ori
-        if best_value < best_grb:
-            return best_variable, best_value, zeit, curve, curve_ori
+        #if best_value < best_grb:
+            #return best_variable, best_value, zeit, curve, curve_ori
 
     #best_value = fitness[best_idx]
     #end_time = time.time()

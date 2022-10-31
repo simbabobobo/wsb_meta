@@ -1,6 +1,7 @@
 import re
 import numpy as np
 import math
+import time
 
 """
 将mps文件所对应的 有约束模型
@@ -164,6 +165,8 @@ def load_mps(path):
 def parse_mps(mps_file, penalty_coeff=100000):
 
     print('Start parse')
+    start_time = time.time()
+    print('Start load')
     name, objective_name, row_names, col_names, col_types, types, c, A, \
     rhs_names, rhs, bnd_names, bnd = load_mps(mps_file)
     """
@@ -181,7 +184,7 @@ def parse_mps(mps_file, penalty_coeff=100000):
     dimensions = len(col_names)
     rhs_names1 = rhs_names[0]
     rhs1 = rhs[rhs_names1]
-
+    print('Start generate ori')
     def generate_ori():
         ori = []
         for i in range(dimensions):
@@ -192,7 +195,7 @@ def parse_mps(mps_file, penalty_coeff=100000):
 
     ori_obj = generate_ori()
     # 生成目标函数
-
+    print('Start gene constrain')
     def generate_cons():
         eq_list = []
         ueq_list = []
@@ -226,6 +229,7 @@ def parse_mps(mps_file, penalty_coeff=100000):
 
     eq, ueq = generate_cons()
     # 生成等式和不等式约束
+    print('Start gene penalty')
 
     def penalty_obj(var, typ=1, t=1):
         obj = ori_obj(var)
@@ -301,6 +305,10 @@ def parse_mps(mps_file, penalty_coeff=100000):
         return lb, ub
     low, up = generate_bound()
 
+    print('parse end')
+    end_time = time.time()
+    zeit = end_time - start_time
+    print('parse time:', zeit)
 
     return penalty_obj, dimensions, low, up, precision, ori_obj, \
            penalty_eq_obj, penalty_ueq_obj
