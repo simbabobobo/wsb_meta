@@ -2,6 +2,7 @@ import numpy as np
 import random
 import math
 import copy
+import time
 from matplotlib import pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
@@ -63,6 +64,8 @@ def SortPosition(X, index):
 
 
 def WOA(pop, dim, lb, ub, MaxIter, fun, orgj):
+
+
     X, lb, ub = initial(pop, dim, ub, lb)  # 初始化种群
     fitness = CaculateFitness(X, fun)  # 计算适应度值
     fitness, sortIndex = SortFitness(fitness)  # 对适应度值排序
@@ -73,6 +76,9 @@ def WOA(pop, dim, lb, ub, MaxIter, fun, orgj):
     Curve = np.zeros([MaxIter, 1])
     Curve_v = np.zeros([MaxIter, 1])
     # 生成maxiter*1的各项都为0的多维列表
+
+
+
     for t in range(MaxIter):
         Leader = X[0, :]  # 领头鲸鱼
         a = 2 - t * (2 / MaxIter)  # 线性下降权重2 - 0
