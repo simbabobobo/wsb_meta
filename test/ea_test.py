@@ -63,14 +63,14 @@ precision, ori_obj, penalty_eq_obj, penalty_ueq_obj
 """
 
 if __name__ == "__main__":
-    model = 'markshare2.mps'
+    model = 'neos-2657525-crna.mps'
     algorithm = 'ea'
-    setting = 'mut 0.1 crossp 0.9'
+    setting = 'origin'
     input_path = read_mps(model)
     #GR = gurobi(input_path)
     PR = parse_mps(input_path, penalty_coeff=100000)
     DE = de(PR[0], PR[5], PR[1], PR[2], PR[3], PR[4], time_limit=100,
-            mutschema=3, crosschema=1, mut=0.1, mut2=0.8, crossp=0.9,
+            mutschema=3, crosschema=1, mut=0.8, mut2=0.8, crossp=0.2,
             popsize=200, its=100)
     # mut=0.8, crossp=0.2, popsize=200, its=100
     output(DE[1], DE[0], DE[2], PR[5], PR[6], PR[7], setting)
