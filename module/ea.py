@@ -38,11 +38,10 @@ def de(fobj, orgj, dimensions, lb, ub, precision, time_limit=3600,
     zeit = 0
     zwischen_time = time.time()
     zeit_1 = zwischen_time - start_time
-    if zeit_1 > time_limit:
-        return best_variable, best_value, zeit, curve, curve_ori
-
     curve = np.zeros([its, 1])
     curve_ori = np.zeros([its, 1])
+    if zeit_1 > time_limit:
+        return best_variable, best_value, zeit_1, curve, curve_ori
     for i in range(its):
         print('its is', t)
         t += 1
