@@ -33,7 +33,7 @@ def output(best, x, zeit, ori_obj, p_eq, p_ueq):
     ueq = p_ueq(x)
 
     data = [[model, algorithm, 'parameter', best, zeit, ori, eq[0], ueq[0],
-             eq[1], ueq[1]]]
+             eq[1], ueq[1], ]]
     data_v = x
     df = pd.DataFrame(data)
     df_v = pd.DataFrame(data_v)
@@ -68,7 +68,7 @@ if __name__ == "__main__":
     input_path = lesen(model)
     GR = gurobi(input_path)
     PR = parse_mps(input_path, penalty_coeff=100000)
-    DE = de(PR[0], PR[5], PR[1], PR[2], PR[3], PR[4], GR[0], time_grb=100,
+    DE = de(PR[0], PR[5], PR[1], PR[2], PR[3], PR[4], time_limit=3600,
             mutschema=3, crosschema=1, mut=0.8, mut2=0.8, crossp=0.2,
             popsize=200, its=100)
     # mut=0.8, crossp=0.6, popsize=200, its=100
