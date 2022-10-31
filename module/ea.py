@@ -16,7 +16,7 @@ def de(fobj, orgj, dimensions, lb, ub, precision, time_limit=3600,
     print('EA Start')
     bounds = list(zip(lb, ub))
     t=1
-    typ = 2
+    typ = 1
 
     # random (0-1) positions for all particles
     pop = np.random.rand(popsize, dimensions)
