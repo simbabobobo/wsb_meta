@@ -3,19 +3,17 @@ import os
 
 
 base_path = os.path.dirname(os.path.dirname(__file__))
-input_path = os.path.join(base_path, 'model_file_mps', 'neos-2657525-crna.mps')
+input_path = os.path.join(base_path, 'model_file_mps', 'neos-950242.mps')
 
 print(input_path)
 
-
 model = read(input_path)
-
 #model.setParam("Method",2)
 #model.setParam("GomoryPasses", 0)
-model.Params.TuneTimeLimit=100
-#model.tune()
+model.Params.TuneTimeLimit = 3600
+model.tune()
 model.optimize()
-obj_res = model.getObjective().getValue()
+#obj_res = model.getObjective().getValue()
 
 #print('objval', model.ObjVal)
 
