@@ -1,7 +1,8 @@
-import numpy as np
-dimensions=2
-cross_points = np.random.rand(dimensions) < 0.5
-print(cross_points)
+a=[1,
+   2,
+   3]
+for i in range(3):
+    print(a[i])
 
 
 
