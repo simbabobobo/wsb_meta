@@ -13,14 +13,16 @@ class PSO():
         self.pop = pop  # number of particles
         self.n_dim = n_dim  # dimension of particles, which is the number of variables of func
         self.max_iter = max_iter  # max iter
-        self.timelimit = time_limit
-        self.run_time = None
-        self.curve = np.zeros([max_iter, 1])
-        self.precision = precision
 
         self.lb, self.ub = np.array(lb) * np.ones(self.n_dim), np.array(ub) * np.ones(self.n_dim)
         assert self.n_dim == len(self.lb) == len(self.ub), 'dim == len(lb) == len(ub) is not True'
         assert np.all(self.ub > self.lb), 'upper-bound must be greater than lower-bound'
+
+        # 添加
+        self.timelimit = time_limit
+        self.run_time = None
+        self.curve = np.zeros([max_iter, 1])
+        self.precision = precision
 
         self.X = np.random.uniform(low=self.lb, high=self.ub, size=(self.pop, self.n_dim))
         # 生成pop行 dim列的随机数组
@@ -38,6 +40,8 @@ class PSO():
         self.gbest_y = np.inf  # global best y for all particles
         # self.gbest_y_hist = []  # gbest_y of every iteration
         self.update_gbest()
+
+
 
     def update_pbest(self):
         '''
@@ -74,6 +78,7 @@ class PSO():
                 self.X[::, seq] = np.round(self.X[::, seq])
         self.Y = [self.func(self.X[i]) for i in range(len(self.X))]
 
+    # 添加
     def update_curve(self, its):
         self.curve[its] = self.gbest_y
 

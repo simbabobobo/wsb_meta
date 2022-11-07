@@ -63,21 +63,21 @@ def SortPosition(X, index):
 '''鲸鱼优化算法'''
 
 
-def WOA(pop, dim, lb, ub, MaxIter, fun, orgj):
-
-
+def WOA(func, dim, lb, ub, precision, time_limit,
+        pop, MaxIter):
+    start_time = time.time()
     X, lb, ub = initial(pop, dim, ub, lb)  # 初始化种群
-    fitness = CaculateFitness(X, fun)  # 计算适应度值
+
+    fitness = CaculateFitness(X, func)  # 计算适应度值
     fitness, sortIndex = SortFitness(fitness)  # 对适应度值排序
     X = SortPosition(X, sortIndex)  # 种群排序
     GbestScore = copy.copy(fitness[0])
     GbestPositon = np.zeros([1,dim])
     GbestPositon[0,:] = copy.copy(X[0, :])
+    run_time = None
     Curve = np.zeros([MaxIter, 1])
-    Curve_v = np.zeros([MaxIter, 1])
+
     # 生成maxiter*1的各项都为0的多维列表
-
-
 
     for t in range(MaxIter):
         Leader = X[0, :]  # 领头鲸鱼
@@ -109,15 +109,19 @@ def WOA(pop, dim, lb, ub, MaxIter, fun, orgj):
                     X[i, j] = distance2Leader * np.exp(b * l) * np.cos(l * 2 * math.pi) + Leader[j]
 
         X = BorderCheck(X, ub, lb, pop, dim)  # 边界检测
-        fitness = CaculateFitness(X, fun)  # 计算适应度值
+        for seq in range(dim):
+            if precision[seq] == 'integral':
+                X[::, seq] = np.round(X[::, seq])
+        fitness = CaculateFitness(X, func)  # 计算适应度值
         fitness, sortIndex = SortFitness(fitness)  # 对适应度值排序
         X = SortPosition(X, sortIndex)  # 种群排序
         if fitness[0] <= GbestScore:  # 更新全局最优
             GbestScore = copy.copy(fitness[0])
             GbestPositon[0,:] = copy.copy(X[0, :])
         Curve[t] = GbestScore
-        Curve_v[t] = orgj(GbestPositon[0,:])
+        end_time = time.time()
+        run_time = end_time - start_time
+        if run_time > time_limit:
+            return GbestPositon, GbestScore, run_time, Curve
 
-
-
-    return GbestScore, GbestPositon, Curve, Curve_v
+    return GbestPositon[0], GbestScore, run_time, Curve

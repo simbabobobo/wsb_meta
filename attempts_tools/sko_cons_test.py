@@ -2,8 +2,7 @@
 results not good enough for constrained problems
 """
 
-from sko.GA import GA
-from sko.DE import DE
+from module.ga import GA
 
 
 def obj_func(p):

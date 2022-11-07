@@ -235,31 +235,25 @@ def parse_mps(mps_file, penalty_coeff=100000):
         obj = ori_obj(var)
 
         if typ == 1:
-            for i in range(len(eq)):
-                equation = eq[i]
-                eq_method = lambda x: eval(equation)
+            for i in eq:
+                eq_method = lambda x: eval(i)
                 obj += penalty_coeff * (max(0, abs(eq_method(var)))) ** 2
-            for i in range(len(ueq)):
-                equation = ueq[i]
-                ueq_method = lambda x: eval(equation)
+            for i in ueq:
+                ueq_method = lambda x: eval(i)
                 obj += penalty_coeff * (max(0, ueq_method(var)))
         if typ == 2:
-            for i in range(len(eq)):
-                equation = eq[i]
-                eq_method = lambda x: eval(equation)
+            for i in eq:
+                eq_method = lambda x: eval(i)
                 obj += (500 * t)**2 * (max(0, abs(eq_method(var))))**2
-            for i in range(len(ueq)):
-                equation = ueq[i]
-                ueq_method = lambda x: eval(equation)
+            for i in ueq:
+                ueq_method = lambda x: eval(i)
                 obj += (500 * t)**2 * (max(0, ueq_method(var)))
         if typ == 3:
-            for i in range(len(eq)):
-                equation = eq[i]
-                eq_method = lambda x: eval(equation)
+            for i in eq:
+                eq_method = lambda x: eval(i)
                 obj += t * (max(0, abs(eq_method(var))))**2
-            for i in range(len(ueq)):
-                equation = ueq[i]
-                ueq_method = lambda x: eval(equation)
+            for i in ueq:
+                ueq_method = lambda x: eval(i)
                 obj += t * (max(0, ueq_method(var)))**2
 
         return obj

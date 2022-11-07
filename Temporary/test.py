@@ -1,7 +1,9 @@
 import numpy as np
+import copy
 
-r1 = np.zeros([3, 1])
-print(r1)
+GbestPositon = np.zeros([1, 4])
+print(GbestPositon[0, :])
+
 
 
 
