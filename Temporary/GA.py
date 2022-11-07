@@ -42,6 +42,7 @@ def translateDNA(pop):  # pop表示种群矩阵，一行表示一个二进制编
     y_pop = pop[:, DNA_SIZE:]  # 后DNA_SIZE位表示Y
 
     x = x_pop.dot(2 ** np.arange(DNA_SIZE)[::-1]) / float(2 ** DNA_SIZE - 1) * (X_BOUND[1] - X_BOUND[0]) + X_BOUND[0]
+    用于生成数组
     y = y_pop.dot(2 ** np.arange(DNA_SIZE)[::-1]) / float(2 ** DNA_SIZE - 1) * (Y_BOUND[1] - Y_BOUND[0]) + Y_BOUND[0]
     return x, y
 

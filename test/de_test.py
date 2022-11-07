@@ -1,5 +1,5 @@
 from module.parse_mps import *
-from module.ea import *
+from module.de import *
 import os
 import pandas as pd
 from matplotlib import pyplot as plt
@@ -14,16 +14,7 @@ def read_mps(model):
     return in_path
 
 
-def gurobi(in_path):
-    model = read('PyomoExample.mps')
-    model.optimize()
-    time_grb = model.Runtime
-    best_grb = model.ObjVal
-    print('grb', best_grb, 'in',time_grb)
-    return best_grb, time_grb,
-
-
-def output(best, x, zeit, ori_obj, p_eq, p_ueq, change):
+def output(x, best, zeit, ori_obj, p_eq, p_ueq, change):
     base_path = os.path.dirname(os.path.dirname(__file__))
     output_path = os.path.join(base_path, 'results', 'metaheuristic.csv')
     output_path_v = os.path.join(base_path, 'results', 'meta_variable.csv')
@@ -64,16 +55,22 @@ precision, ori_obj, penalty_eq_obj, penalty_ueq_obj
 
 if __name__ == "__main__":
     model = 'neos-2657525-crna.mps'
-    algorithm = 'ea'
+    algorithm = 'de'
     setting = 'popsize=20'
     input_path = read_mps(model)
-    #GR = gurobi(input_path)
     PR = parse_mps(input_path, penalty_coeff=100000)
+    '''
+    # PR[0]penalty_obj, PR[1]dimensions, PR[2]low, PR[3]up, PR[4]precision, 
+    PR[5]ori_obj, PR[6]penalty_eq_obj, PR[7]penalty_ueq_obj
+    '''
     DE = de(PR[0], PR[5], PR[1], PR[2], PR[3], PR[4], time_limit=100,
             mutschema=3, crosschema=1, mut=0.8, mut2=0.8, crossp=0.2,
             popsize=20, its=100)
     # mut=0.8, crossp=0.2, popsize=200, its=100
-    output(DE[1], DE[0], DE[2], PR[5], PR[6], PR[7], setting)
+    '''
+    DE[0]best_variable, DE[1]best_value, DE[2]zeit, DE[3]curve, DE[4]curve_ori
+    '''
+    output(DE[0], DE[1], DE[2], PR[5], PR[6], PR[7], setting)
     bild(DE[3], DE[4], DE[2])
 
 

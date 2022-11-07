@@ -1,8 +1,7 @@
-a=[1,
-   2,
-   3]
-for i in range(3):
-    print(a[i])
+import numpy as np
+
+r1 = np.zeros([3, 1])
+print(r1)
 
 
 
