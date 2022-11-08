@@ -37,6 +37,7 @@ if __name__ == "__main__":
                  ['Presolve', 2.0]]
     Mpsfile = ['reblock115.mps', 'var-smallemery-m6j6.mps', 'neos-631710.mps']
 
+
     base_path = os.path.dirname(os.path.dirname(__file__))
     output_path = os.path.join(base_path, 'results', 'gurobi_result.csv')
 
