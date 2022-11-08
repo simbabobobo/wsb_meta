@@ -1,8 +1,9 @@
-a=[1,
-   2,
-   3]
-for i in range(3):
-    print(a[i])
+import numpy as np
+import copy
+
+GbestPositon = np.zeros([1, 4])
+print(GbestPositon[0, :])
+
 
 
 

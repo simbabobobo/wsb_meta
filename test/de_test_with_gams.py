@@ -66,10 +66,9 @@ for v in m.component_objects(pyo.Var, active=True):
         print("   ", v[index], v[index].value)
 """
 import os
-import numpy as pd
 
 from module.parse_gams import *
-from module.de import *
+from backup.de import *
 
 ########
 # Parse GAMS file
