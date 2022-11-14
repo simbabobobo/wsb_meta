@@ -1,10 +1,6 @@
 import numpy as np
-import copy
-
-GbestPositon = np.zeros([1, 4])
-print(GbestPositon[0, :])
-
-
+for i in range()
+x=np.exp(b * l) * np.cos(l * 2 * math.pi)
 
 
 
