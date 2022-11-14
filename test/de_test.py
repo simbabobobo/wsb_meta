@@ -1,9 +1,9 @@
-from module.parse_mps import *
+from Temporary.parsenew import *
 from module.de import *
 import os
 import pandas as pd
 from matplotlib import pyplot as plt
-from gurobipy import *
+
 
 
 def read_mps(model):
@@ -56,21 +56,23 @@ precision, ori_obj, penalty_eq_obj, penalty_ueq_obj
 if __name__ == "__main__":
     model = 'neos-2657525-crna.mps'
     algorithm = 'de'
-    setting = 'popsize=20'
+    setting = 'test'
     input_path = read_mps(model)
     PR = parse_mps(input_path, penalty_coeff=100000)
     '''
-    # PR[0]penalty_obj, PR[1]dimensions, PR[2]low, PR[3]up, PR[4]precision, 
-    PR[5]ori_obj, PR[6]penalty_eq_obj, PR[7]penalty_ueq_obj
+    # PR[0]ori_obj, PR[1]dimensions, PR[2]low, PR[3]up, PR[4]precision, 
+    PR[5]eq, PR[6]penalty_eq_obj, PR[7]penalty_ueq_obj,PR[8]
+    ori_obj, dimensions, low, up, precision, eq, \
+           penalty_eq_obj, penalty_ueq_obj,ueq,
     '''
-    DE = de(PR[0], PR[5], PR[1], PR[2], PR[3], PR[4], time_limit=100,
+    DE = de(PR[0], PR[5], PR[8], PR[1], PR[2], PR[3], PR[4], time_limit=100,
             mutschema=3, crosschema=1, mut=0.8, mut2=0.8, crossp=0.2,
-            popsize=20, its=100)
+            popsize=200, its=1)
     # mut=0.8, crossp=0.2, popsize=200, its=100
     '''
     DE[0]best_variable, DE[1]best_value, DE[2]zeit, DE[3]curve, DE[4]curve_ori
     '''
-    output(DE[0], DE[1], DE[2], PR[5], PR[6], PR[7], setting)
+    output(DE[0], DE[1], DE[2], PR[0], PR[6], PR[7], setting)
     bild(DE[3], DE[4], DE[2])
 
 

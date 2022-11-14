@@ -1,6 +1,7 @@
 import numpy as np
-for i in range()
-x=np.exp(b * l) * np.cos(l * 2 * math.pi)
-
+a=[1,2]
+a=np.array(a)
+b=np.sum(a)
+print(type(b))
 
 

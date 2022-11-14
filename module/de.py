@@ -5,12 +5,32 @@ import numpy as np
 import time
 
 
-def de(fobj, orgj, dimensions, lb, ub, precision, time_limit=3600,
+
+
+def de(ori, eq, ueq, dimensions, lb, ub, precision, time_limit=3600,
        mutschema=3,
        crosschema=1,
        mut=0.8,
        mut2=0.8,
        crossp=0.2, popsize=200, its=500):
+
+    def fitnessfunc(X):
+        value = ori(X)
+        eq_value = []
+        ueq_value = []
+        for i in eq:
+            eq_i = lambda x: eval(i)
+            eq_value.append(eq_i(X))
+        eq_value = np.array(eq_value)
+        penalty_eq = np.array([np.sum((np.abs(eq_value)) ** 2)])
+        for i in ueq:
+            ueq_i = lambda x: eval(i)
+            ueq_value.append(max(0, ueq_i(X)))
+        ueq_value = np.array(ueq_value)
+        penalty_ueq = np.array([np.sum(ueq_value)])
+        value = value + 1e5 * penalty_eq + 1e5 * penalty_ueq
+
+        return value
 
     start_time = time.time()
     print('EA Start')
@@ -30,7 +50,7 @@ def de(fobj, orgj, dimensions, lb, ub, precision, time_limit=3600,
         if precision[seq] == 'integral':
             pop_denorm[::, seq] = np.round(pop_denorm[::, seq])
     #fitness = np.asarray([fobj(ind) for ind in pop_denorm])
-    fitness = np.asarray([fobj(ind,typ,t) for ind in pop_denorm])
+    fitness = np.asarray([fitnessfunc(ind) for ind in pop_denorm])
     # global best particle position
     best_idx = np.argmin(fitness)
     best_variable = pop_denorm[best_idx]
@@ -92,7 +112,7 @@ def de(fobj, orgj, dimensions, lb, ub, precision, time_limit=3600,
                 # Exponential (exp)
             trial_denorm = min_b + trial * diff
             #f = fobj(trial_denorm)
-            f = fobj(trial_denorm, typ,t)
+            f = fitnessfunc(trial_denorm)
             if f < fitness[j]:
                 fitness[j] = f
                 pop[j] = trial
@@ -100,7 +120,7 @@ def de(fobj, orgj, dimensions, lb, ub, precision, time_limit=3600,
                     best_idx = j
                     best_variable = trial_denorm
         curve[i] = fitness[best_idx]
-        curve_ori[i] = orgj(best_variable)
+        curve_ori[i] = ori(best_variable)
         best_value = fitness[best_idx]
         end_time = time.time()
         zeit = end_time - start_time

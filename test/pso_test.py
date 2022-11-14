@@ -53,7 +53,7 @@ precision, ori_obj, penalty_eq_obj, penalty_ueq_obj
 """
 
 if __name__ == "__main__":
-    model = 'PyomoExample.mps'
+    model = 'reblock115.mps'
     algorithm = 'pso'
     setting = 'test'
     input_path = read_mps(model)
@@ -64,7 +64,7 @@ if __name__ == "__main__":
     '''
     pso = PSO(func=PR[0], n_dim=PR[1], lb=PR[2], ub=PR[3], precision=PR[4],
               time_limit=3600,
-              pop=40, max_iter=150, w=0.8, c1=0.5, c2=0.5)
+              pop=1, max_iter=1, w=0.8, c1=0.5, c2=0.5)
     # 默认 pop=40, max_iter=150, w=0.8, c1=0.5, c2=0.5
     result = pso.run()
     '''
