@@ -54,7 +54,7 @@ precision, ori_obj, penalty_eq_obj, penalty_ueq_obj
 """
 
 if __name__ == "__main__":
-    model = 'PyomoExample.mps'
+    model = 'reblock115.mps'
     algorithm = 'woa'
     setting = 'test'
     input_path = read_mps(model)
@@ -64,8 +64,8 @@ if __name__ == "__main__":
     PR[5]ori_obj, PR[6]penalty_eq_obj, PR[7]penalty_ueq_obj
     '''
     result = WOA(func=PR[0], dim=PR[1], lb=PR[2], ub=PR[3], precision=PR[4],
-              time_limit=3600,
-              pop=30, MaxIter=1000)
+              time_limit=600,
+              pop=30, MaxIter=100)
     # 默认 pop=30, MaxIter=1000
     '''
     result[0]self.gbest_x, result[1]self.gbest_y, result[2]run_time, 
