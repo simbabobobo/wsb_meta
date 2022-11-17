@@ -3,43 +3,44 @@ import time
 
 
 class GA:
-    def __init__(self, ori, eq, ueq, n_dim, lb, ub, precision, time_limit=3600,
-                 size_pop=50, max_iter=200, prob_mut=0.001,
-                 prob_cros=0.9):
+    def __init__(self, ori, eq, ueq, n_dim, lb, ub, precision,
+                 time_limit=3600, size_pop=50, max_iter=200, prob_mut=0.001,
+                 prob_cros=0.9, p_typ='s'):
 
         self.ori = ori
         self.eq = eq
         self.ueq = ueq
-        assert size_pop % 2 == 0, 'size_pop must be even integer'
+        self.n_dim = n_dim
+        self.lb, self.ub = np.array(lb) * np.ones(self.n_dim), np.array(
+            ub) * np.ones(self.n_dim)
+        self.precision = precision
+
+        self.timelimit = time_limit
+        # assert size_pop % 2 == 0, 'size_pop must be even integer'
         self.size_pop = size_pop  # size of population
         self.max_iter = max_iter
         self.prob_mut = prob_mut  # probability of mutation
-        self.n_dim = n_dim
-        # self.lb, self.ub = np.array(lb) * np.ones(self.n_dim), np.array(ub)
-        # * np.ones(self.n_dim)
-        self.lb, self.ub = np.array(lb) * np.ones(self.n_dim), np.array(
-            ub) * np.ones(self.n_dim)
         self.prob_cros = prob_cros
+        self.typ = p_typ
+
+        self.setting = 'size_pop=' + str(self.size_pop)+'max_iter='+str(
+            self.max_iter)+'prob_mut='+str(self.prob_mut)+ \
+                       'prob_cros='+ str(self.prob_cros)+'p_ty='+str(self.typ)
 
         self.Chrom = None
         self.X = None  # shape = (size_pop, n_dim)
         self.Y_raw = None  # shape = (size_pop,) , value is f(x)
         self.Y = None  # shape = (size_pop,) , value is f(x) + penalty for constraint
-        self.FitV = None  # shape = (size_pop,)
-
-        # self.FitV_history = []
+        self.FitV = None  # -self.Y
         self.generation_best_X = []
         self.generation_best_Y = []
-
         self.all_history_Y = []
         self.all_history_FitV = []
-
         self.best_x, self.best_y = None, None
 
-        self.timelimit = time_limit
+        self.iter = 0
         self.run_time = None
         self.curve = np.zeros([max_iter, 1])
-        self.precision = precision
 
     def crtbp(self):
         # create the population, random floating point numbers of 0 ~ 1
@@ -122,17 +123,19 @@ class GA:
         return self.Chrom
 
     def func(self, x):
+        value = 0
         x_constrain = np.concatenate((x, np.array([1])), axis=0)
-
         eq_value = np.sum(
                 np.abs([np.sum(c_i * x_constrain) ** 2 for c_i in self.eq]))
-        print('eq_value', eq_value)
         ueq_value = np.sum(
                 np.abs(
                     [max(0, np.sum(c_i * x_constrain)) for c_i in self.ueq]))
-        print('ueq_value', ueq_value)
-        value = np.sum(self.ori * x) + 1e5 * eq_value + 1e5 * ueq_value
-        print('value', value)
+        if self.typ == 's':
+            value = np.sum(self.ori * x) + 1e5 * (eq_value + ueq_value)
+        if self.typ == 'd':
+            value = np.sum(self.ori * x) + (500 * self.iter)**2 * (eq_value +ueq_value)
+            print('xishu', (500 * self.iter)**2)
+
         return value
 
     def x2y(self):
@@ -163,14 +166,14 @@ class GA:
 
         return self.Chrom
 
-    def update_curve(self, its):
-        self.curve[its] = self.best_y
+    def update_curve(self):
+        self.curve[self.iter] = self.best_y
 
-    def run(self, max_iter=None):
+    def run(self):
         start_time = time.time()
-        self.max_iter = max_iter or self.max_iter
         self.crtbp()
         for i in range(self.max_iter):
+            self.iter = i
             self.X = self.chrom2x()
             self.Y = self.x2y()
             self.ranking()
@@ -187,14 +190,15 @@ class GA:
             global_best_index = np.array(self.generation_best_Y).argmin()
             self.best_x = self.generation_best_X[global_best_index]
             self.best_y = self.func(np.array(self.best_x))
-            self.update_curve(i)
+            print('best value is :',self.best_y)
+            self.update_curve()
             end_time = time.time()
             self.run_time = end_time - start_time
             if self.run_time > self.timelimit:
                 # self.best_x, self.best_y = self.gbest_x, self.gbest_y
                 return self.best_x, self.best_y, self.run_time, self.curve
 
-        return self.best_x, self.best_y, self.run_time, self.curve
+        return self.best_x, self.best_y, self.run_time, self.curve, self.setting
 
 
 

@@ -18,22 +18,13 @@ def output(x, best, zeit, ori_obj, p_eq, p_ueq, change):
     base_path = os.path.dirname(os.path.dirname(__file__))
     output_path = os.path.join(base_path, 'results', 'metaheuristic.csv')
     output_path_v = os.path.join(base_path, 'results', 'meta_variable.csv')
-    '''
 
     ori = ori_obj(x)
     eq = p_eq(x)
     ueq = p_ueq(x)
-    '''
-    ori = ori_obj
-    eq = p_eq
-    ueq = p_ueq
-    '''
 
-    data = [[model, algorithm, change, best, zeit, ori, eq[0], ueq[0],
-             eq[1], ueq[1]]]
-    '''
-    data = [[model, algorithm, change, best, zeit, ori, eq, ueq,
-             eq, ueq]]
+    data = [[model, algorithm, change, best, zeit, ori, eq[0], eq[1], ueq[0],
+             ueq[1]]]
     data_v = x
     df = pd.DataFrame(data)
     df_v = pd.DataFrame(data_v)
@@ -85,7 +76,7 @@ if __name__ == "__main__":
     '''
     print('best obj is', DE[1])
 
-    output(DE[0], DE[1], DE[2], PR[7], PR[8], PR[9], setting)
+    output(DE[0], DE[1], DE[2], PR[7], PR[8], PR[9], DE[5])
     bild(DE[3], DE[4], DE[2])
 
 

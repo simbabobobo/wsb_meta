@@ -5,12 +5,9 @@ import numpy as np
 import time
 
 
-def de(ori, eq, ueq, dimensions, lb, ub, precision, time_limit=3600,
-       mutschema=3,
-       crosschema=1,
-       mut=0.8,
-       mut2=0.8,
-       crossp=0.2, popsize=200, its=500):
+def de(ori, eq, ueq, dimensions, lb, ub, precision,
+       time_limit=3600, popsize=200, its=500,
+       mutschema=3, crosschema=1, mut=0.8, mut2=0.8, crossp=0.2,):
 
     def fitnessfunc(X):
         X_constrain = np.concatenate((X, np.array([1])), axis=0)
@@ -24,6 +21,9 @@ def de(ori, eq, ueq, dimensions, lb, ub, precision, time_limit=3600,
         return value
 
     start_time = time.time()
+    setting = 'mutschema='+ str(mutschema)+ 'crosschema='+ str(crosschema)+ \
+              'mut=' + str(mut) + 'mut2=' + str(mut2) + 'crossp=' + str(crossp)
+
     print('EA Start')
     bounds = list(zip(lb, ub))
     t=1
@@ -128,6 +128,6 @@ def de(ori, eq, ueq, dimensions, lb, ub, precision, time_limit=3600,
     #print('Variable:', best_variable)
 
     #yield best_variable, best_value, zeit, curve, curve_ori
-    return best_variable, best_value, zeit, curve, curve_ori
+    return best_variable, best_value, zeit, curve, curve_ori, setting
 
 

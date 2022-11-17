@@ -230,8 +230,7 @@ def parse_mps(mps_file, penalty_coeff=100000):
             eq_value.append(np.sum(c_i * x_constrain))
             if np.sum(c_i * x_constrain) != 0:
                 counter += 1
-        eq_value = np.array(
-            [np.sum(np.abs([eq_value]))])
+        eq_value = np.sum(np.abs([eq_value]))
         return eq_value, counter
 
     def p_ueq_func(x):
@@ -242,8 +241,7 @@ def parse_mps(mps_file, penalty_coeff=100000):
             ueq_value.append(max(0, np.sum(c_i * x_constrain)))
             if np.sum(c_i * x_constrain) >= 0:
                 counter += 1
-        ueq_value = np.array(
-            [np.sum(np.abs([ueq_value]))])
+        ueq_value = np.sum(np.abs([ueq_value]))
         return ueq_value, counter
 
     # 生成等式和不等式约束
