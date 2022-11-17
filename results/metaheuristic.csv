@@ -106,3 +106,4 @@
 0,markshare_4_0.mps,ga,test,400157.64309989836,3.420969009399414,156.9991890845121,[2.00374048],[0.],4,0
 0,markshare_4_0.mps,pso,test,35100000.0,2.292841672897339,0.0,[29.],4,[0.],0
 0,markshare_4_0.mps,pso,test,111300000.0,1.9452550411224365,0.0,[57.],4,[0.],0
+0,markshare_4_0.mps,denew,mutschema=5 mut 0.1 crosssp 0.9,6956047434.168056,3.2425880432128906,<function parse_mps.<locals>.ori_func at 0x0000020D9DC66550>,<function parse_mps.<locals>.p_eq_func at 0x0000020D9DC665E0>,<function parse_mps.<locals>.p_ueq_func at 0x0000020D9DC66670>,<function parse_mps.<locals>.p_eq_func at 0x0000020D9DC665E0>,<function parse_mps.<locals>.p_ueq_func at 0x0000020D9DC66670>

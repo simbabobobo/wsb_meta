@@ -14,12 +14,10 @@ def de(ori, eq, ueq, dimensions, lb, ub, precision, time_limit=3600,
 
     def fitnessfunc(X):
         X_constrain = np.concatenate((X, np.array([1])), axis=0)
-        eq_value = np.array(
-            [np.sum(np.abs([np.sum(c_i * X_constrain) ** 2 for c_i in eq]))])
+        eq_value = np.sum(np.abs([np.sum(c_i * X_constrain) ** 2 for c_i in eq]))
         print('eq_value', eq_value)
-        ueq_value = np.array(
-            [np.sum(
-                np.abs([max(0, np.sum(c_i * X_constrain)) for c_i in ueq]))])
+        ueq_value = np.sum(
+                np.abs([max(0, np.sum(c_i * X_constrain)) for c_i in ueq]))
         print('ueq_value', ueq_value)
         value = np.sum(ori * X) + 1e5 * eq_value + 1e5 * ueq_value
         print('value', value)
