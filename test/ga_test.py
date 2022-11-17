@@ -63,7 +63,7 @@ if __name__ == "__main__":
     PR[5]ori_obj, PR[6]penalty_eq_obj, PR[7]penalty_ueq_obj
     '''
     ga = GA(PR[0], PR[1], PR[2], PR[3], PR[4], PR[5], PR[6],
-            time_limit=3600, size_pop=100, max_iter=100, prob_mut=0.001,
+            time_limit=3600, size_pop=200, max_iter=100, prob_mut=0.001,
             prob_cros=0.9)
     # 默认 pop=40, max_iter=150, w=0.8, c1=0.5, c2=0.5
     result = ga.run()

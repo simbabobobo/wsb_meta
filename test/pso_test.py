@@ -67,7 +67,7 @@ if __name__ == "__main__":
     '''
     pso = PSO(PR[0], PR[1], PR[2], PR[3], PR[4], PR[5], PR[6],
               time_limit=3600,
-              pop=100, max_iter=100, w=0.8, c1=0.5, c2=0.5)
+              pop=200, max_iter=100, w=0.8, c1=0.5, c2=0.5)
     # 默认 pop=40, max_iter=150, w=0.8, c1=0.5, c2=0.5
     result = pso.run()
     '''
