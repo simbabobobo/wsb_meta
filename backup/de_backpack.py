@@ -5,25 +5,12 @@ import numpy as np
 import time
 
 
-def de(ori, eq, ueq, dimensions, lb, ub, precision, time_limit=3600,
+def de(fobj, orgj, dimensions, lb, ub, precision, time_limit=3600,
        mutschema=3,
        crosschema=1,
        mut=0.8,
        mut2=0.8,
        crossp=0.2, popsize=200, its=500):
-
-    def fitnessfunc(X):
-        X_constrain = np.concatenate((X, np.array([1])), axis=0)
-        eq_value = np.array(
-            [np.sum(np.abs([np.sum(c_i * X_constrain) ** 2 for c_i in eq]))])
-        print('eq_value', eq_value)
-        ueq_value = np.array(
-            [np.sum(
-                np.abs([max(0, np.sum(c_i * X_constrain)) for c_i in ueq]))])
-        print('ueq_value', ueq_value)
-        value = np.sum(ori * X) + 1e5 * eq_value + 1e5 * ueq_value
-        print('value', value)
-        return value
 
     start_time = time.time()
     print('EA Start')
@@ -43,7 +30,7 @@ def de(ori, eq, ueq, dimensions, lb, ub, precision, time_limit=3600,
         if precision[seq] == 'integral':
             pop_denorm[::, seq] = np.round(pop_denorm[::, seq])
     #fitness = np.asarray([fobj(ind) for ind in pop_denorm])
-    fitness = np.asarray([fitnessfunc(ind) for ind in pop_denorm])
+    fitness = np.asarray([fobj(ind,typ,t) for ind in pop_denorm])
     # global best particle position
     best_idx = np.argmin(fitness)
     best_variable = pop_denorm[best_idx]
@@ -103,10 +90,9 @@ def de(ori, eq, ueq, dimensions, lb, ub, precision, time_limit=3600,
                 cross_points[location[0]:location[1]] = False
                 trial = np.where(cross_points, mutant, pop[j])
                 # Exponential (exp)
-
             trial_denorm = min_b + trial * diff
             #f = fobj(trial_denorm)
-            f = fitnessfunc(trial_denorm)
+            f = fobj(trial_denorm, typ,t)
             if f < fitness[j]:
                 fitness[j] = f
                 pop[j] = trial
@@ -114,7 +100,7 @@ def de(ori, eq, ueq, dimensions, lb, ub, precision, time_limit=3600,
                     best_idx = j
                     best_variable = trial_denorm
         curve[i] = fitness[best_idx]
-        # curve_ori[i] = ori(best_variable)
+        curve_ori[i] = orgj(best_variable)
         best_value = fitness[best_idx]
         end_time = time.time()
         zeit = end_time - start_time

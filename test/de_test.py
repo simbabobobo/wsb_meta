@@ -1,4 +1,4 @@
-from Temporary.parsenew import *
+from temporary.parse_v1 import *
 from module.de import *
 import os
 import pandas as pd
@@ -18,13 +18,22 @@ def output(x, best, zeit, ori_obj, p_eq, p_ueq, change):
     base_path = os.path.dirname(os.path.dirname(__file__))
     output_path = os.path.join(base_path, 'results', 'metaheuristic.csv')
     output_path_v = os.path.join(base_path, 'results', 'meta_variable.csv')
+    '''
 
     ori = ori_obj(x)
     eq = p_eq(x)
     ueq = p_ueq(x)
+    '''
+    ori = ori_obj
+    eq = p_eq
+    ueq = p_ueq
+    '''
 
     data = [[model, algorithm, change, best, zeit, ori, eq[0], ueq[0],
              eq[1], ueq[1]]]
+    '''
+    data = [[model, algorithm, change, best, zeit, ori, eq, ueq,
+             eq, ueq]]
     data_v = x
     df = pd.DataFrame(data)
     df_v = pd.DataFrame(data_v)
@@ -54,25 +63,29 @@ precision, ori_obj, penalty_eq_obj, penalty_ueq_obj
 """
 
 if __name__ == "__main__":
-    model = 'neos-2657525-crna.mps'
-    algorithm = 'de'
-    setting = 'test'
+    model = 'markshare_4_0.mps'
+    algorithm = 'denew'
+    setting = 'mutschema=5 mut 0.1 crosssp 0.9'
     input_path = read_mps(model)
     PR = parse_mps(input_path, penalty_coeff=100000)
     '''
-    # PR[0]ori_obj, PR[1]dimensions, PR[2]low, PR[3]up, PR[4]precision, 
-    PR[5]eq, PR[6]penalty_eq_obj, PR[7]penalty_ueq_obj,PR[8]
-    ori_obj, dimensions, low, up, precision, eq, \
-           penalty_eq_obj, penalty_ueq_obj,ueq,
-    '''
-    DE = de(PR[0], PR[5], PR[8], PR[1], PR[2], PR[3], PR[4], time_limit=100,
-            mutschema=3, crosschema=1, mut=0.8, mut2=0.8, crossp=0.2,
-            popsize=200, its=1)
+     # PR[0]obj, PR[1]dimensions, PR[2]low, PR[3]up, PR[4]precision, 
+     PR[5]eq, PR[6]ueq, PR[7],PR[8]
+     obj, dimensions, low, up, precision, eq, ueq
+     '''
+    DE = de(PR[0], PR[5], PR[6], PR[1], PR[2], PR[3], PR[4],
+            time_limit=600, mutschema=5, crosschema=1, mut=0.1, mut2=0.8,
+            crossp=0.9, popsize=1, its=1)
     # mut=0.8, crossp=0.2, popsize=200, its=100
+    '''
+    de(ori, eq, ueq, dimensions, lb, ub, precision
+    '''
     '''
     DE[0]best_variable, DE[1]best_value, DE[2]zeit, DE[3]curve, DE[4]curve_ori
     '''
-    output(DE[0], DE[1], DE[2], PR[0], PR[6], PR[7], setting)
+    print('best obj is', DE[1])
+
+    output(DE[0], DE[1], DE[2], PR[1], PR[1], PR[1], setting)
     bild(DE[3], DE[4], DE[2])
 
 

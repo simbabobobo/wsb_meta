@@ -2,24 +2,24 @@ import numpy as np
 import time
 
 
-class GA():
-    def __init__(self, func, n_dim, lb, ub, precision, time_limit=3600,
+class GA:
+    def __init__(self, ori, eq, ueq, n_dim, lb, ub, precision, time_limit=3600,
                  size_pop=50, max_iter=200, prob_mut=0.001,
                  prob_cros=0.9):
 
-        self.func = func
+        self.ori = ori
+        self.eq = eq
+        self.ueq = ueq
         assert size_pop % 2 == 0, 'size_pop must be even integer'
         self.size_pop = size_pop  # size of population
         self.max_iter = max_iter
         self.prob_mut = prob_mut  # probability of mutation
         self.n_dim = n_dim
-
-        #self.lb, self.ub = np.array(lb) * np.ones(self.n_dim), np.array(ub)
+        # self.lb, self.ub = np.array(lb) * np.ones(self.n_dim), np.array(ub)
         # * np.ones(self.n_dim)
         self.lb, self.ub = np.array(lb) * np.ones(self.n_dim), np.array(
             ub) * np.ones(self.n_dim)
         self.prob_cros = prob_cros
-
 
         self.Chrom = None
         self.X = None  # shape = (size_pop, n_dim)
@@ -47,20 +47,19 @@ class GA():
         return self.Chrom
 
     def chrom2x(self):
-        X = self.lb + (self.ub - self.lb) * self.Chrom
-
+        self.X = self.lb + (self.ub - self.lb) * self.Chrom
         for seq in range(self.n_dim):
             if self.precision[seq] == 'integral':
                 self.X[::, seq] = np.round(self.X[::, seq])
 
-        return X
+        return self.X
 
     def crossover(self):
-        '''
+        """
         simulated binary crossover
         :param self:
         :return self.Chrom:
-        '''
+        """
         Chrom, size_pop, len_chrom, Y = self.Chrom, self.size_pop, len(self.Chrom[0]), self.FitV
         for i in range(0, size_pop, 2):
 
@@ -80,6 +79,7 @@ class GA():
 
                 child1 = 0.5 * ((1 + betaq) * y1 + (1 - betaq) * y2)
                 child2 = 0.5 * ((1 - betaq) * y1 + (1 + betaq) * y2)
+
 
                 child1 = min(max(child1, ylow), yup)
                 child2 = min(max(child2, ylow), yup)
@@ -121,6 +121,20 @@ class GA():
                     self.Chrom[i][j] = y
         return self.Chrom
 
+    def func(self, x):
+        x_constrain = np.concatenate((x, np.array([1])), axis=0)
+
+        eq_value = np.sum(
+                np.abs([np.sum(c_i * x_constrain) ** 2 for c_i in self.eq]))
+        print('eq_value', eq_value)
+        ueq_value = np.sum(
+                np.abs(
+                    [max(0, np.sum(c_i * x_constrain)) for c_i in self.ueq]))
+        print('ueq_value', ueq_value)
+        value = np.sum(self.ori * x) + 1e5 * eq_value + 1e5 * ueq_value
+        print('value', value)
+        return value
+
     def x2y(self):
         #self.Y = self.func(self.X)
         self.Y = [self.func(self.X[i]) for i in range(len(self.X))]
@@ -129,7 +143,7 @@ class GA():
 
     def ranking(self):
         # GA select the biggest one, but we want to minimize func, so we put a negative here
-        self.FitV = -(self.Y)
+        self.FitV = -self.Y
 
     def selection(self, tourn_size=3):
         '''
@@ -146,6 +160,7 @@ class GA():
         winner = aspirants_values.argmax(axis=1)  # winner index in every team
         sel_index = [aspirants_idx[i, j] for i, j in enumerate(winner)]
         self.Chrom = self.Chrom[sel_index, :]
+
         return self.Chrom
 
     def update_curve(self, its):
