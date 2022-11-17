@@ -1,4 +1,4 @@
-from temporary.parse_v1 import *
+from module.parser_mps import *
 from module.ga import *
 import os
 import pandas as pd

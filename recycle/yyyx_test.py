@@ -1,8 +1,7 @@
-from module.parse_mps import *
+from backup.parse_mps import *
 from temporary.yyyx import *
 import os
 import pandas as pd
-from matplotlib import pyplot as plt
 
 # 读取文件
 base_path = os.path.dirname(os.path.dirname(__file__))

@@ -1,8 +1,4 @@
-from module.parse_mps import *
-from module.de import *
-import os
-import pandas as pd
-from matplotlib import pyplot as plt
+from backup.parse_mps import *
 from gurobipy import *
 
 def lesen(model):

@@ -1,6 +1,5 @@
-from module.parse_mps import *
+from backup.parse_mps import *
 from module.sa import *
-import os
 import pandas as pd
 from matplotlib import pyplot as plt
 from gurobipy import *
