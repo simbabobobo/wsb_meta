@@ -1,7 +1,5 @@
-import numpy as np
-import time
 import os
-from temporary.parse_v1 import *
+from module.parser_mps import *
 
 
 def read_mps(model):
