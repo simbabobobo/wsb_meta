@@ -54,7 +54,7 @@ precision, ori_obj, penalty_eq_obj, penalty_ueq_obj
 """
 
 if __name__ == "__main__":
-    model = 'markshare_4_0.mps'
+    model = 'example_1.mps'
     algorithm = 'ga'
     setting = 'test'
     input_path = read_mps(model)
